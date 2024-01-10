@@ -7,15 +7,14 @@ import br.com.appfastfood.produto.exceptions.ExceptionsMessages;
 
 public class Produto {
     private Long id;
-    private Nome nome;
-    private Preco preco;
-    private UriImagem uriImagem;
+    private String nome;
+    private Double preco;
+    private String uriImagem;
     private CategoriaEnum categoria;
-    private Descricao descricao;
+    private String descricao;
 
-    public Produto(Long id, Nome nome, Preco preco, UriImagem uriImagem, CategoriaEnum categoria, Descricao descricao) {
+    public Produto(Long id, String nome, Double preco, String uriImagem, CategoriaEnum categoria, String descricao) {
         this.id = id;
-        this.validarCampos(nome, preco, uriImagem, categoria, descricao);
         this.nome = nome;
         this.preco = preco;
         this.uriImagem = uriImagem;
@@ -32,24 +31,47 @@ public class Produto {
         return id;
     }
 
-    public Nome getNome() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
         return nome;
     }
 
-    public Preco getPreco() {
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Double getPreco() {
         return preco;
     }
 
-    public UriImagem getUriImagem() {
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
+    public String getUriImagem() {
         return uriImagem;
+    }
+
+    public void setUriImagem(String uriImagem) {
+        this.uriImagem = uriImagem;
     }
 
     public CategoriaEnum getCategoria() {
         return categoria;
     }
 
-    public Descricao getDescricao() {
+    public void setCategoria(CategoriaEnum categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getDescricao() {
         return descricao;
     }
 
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

@@ -9,13 +9,8 @@ import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.infraestrutura.entidades.PedidoEntidade;
 import br.com.appfastfood.pedido.infraestrutura.entidades.ProdEnt;
-import br.com.appfastfood.produto.infraestrutura.entidades.CustomSequence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -40,7 +35,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
         });
-        PedidoEntidade pedidoDb = new PedidoEntidade(generateNextId("pedido"), produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
+        PedidoEntidade pedidoDb = new PedidoEntidade(1L, produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
                 StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
 
@@ -126,15 +121,15 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         this.springDataPedidoRepository.save(pedidoDb);
         return pedido;
     }
-
-    public Long generateNextId(String collectionName) {
-        Query query = new Query(Criteria.where("_id").is(collectionName));
-        Update update = new Update().inc("sequence", 1);
-        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-
-        CustomSequence sequence = mongoTemplate.findAndModify(query, update, options, CustomSequence.class);
-
-        return sequence.getSequence();
-    }
+//
+//    public Long generateNextId(String collectionName) {
+//        Query query = new Query(Criteria.where("_id").is(collectionName));
+//        Update update = new Update().inc("sequence", 1);
+//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+//
+//        CustomSequence sequence = mongoTemplate.findAndModify(query, update, options, CustomSequence.class);
+//
+//        return sequence.getSequence();
+//    }
 
 }
