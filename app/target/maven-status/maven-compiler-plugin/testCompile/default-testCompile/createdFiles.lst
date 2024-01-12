@@ -1,0 +1,16 @@
+br\com\appfastfood\produto\dominio\vo\ValidacoesTest.class
+br\com\appfastfood\produto\servicos\ProdutoServicoImplTest.class
+br\com\appfastfood\produto\infraestrutura\ProdutoRepositorioImplTest.class
+br\com\appfastfood\produto\dominio\vo\UriImagemTest.class
+br\com\appfastfood\produto\aplicacao\adaptadores\requisicao\ProdutoRequisicaoTest.class
+br\com\appfastfood\produto\dominio\vo\NomeTest.class
+br\com\appfastfood\AppFastfoodApplicationTests.class
+br\com\appfastfood\produto\aplicacao\adaptadores\ProdutoControllerTest.class
+br\com\appfastfood\pedido\aplicacao\adaptadores\PedidoControllerTest.class
+br\com\appfastfood\produto\aplicacao\adaptadores\resposta\ProdutoRespostaTest.class
+br\com\appfastfood\produto\dominio\vo\CategoriaTest.class
+br\com\appfastfood\produto\dominio\vo\enums\CategoriaEnumTest.class
+br\com\appfastfood\produto\dominio\modelo\ProdutoTest.class
+br\com\appfastfood\produto\infraestrutura\entidades\ProdutoEntidadeTest.class
+br\com\appfastfood\produto\dominio\vo\DescricaoTest.class
+br\com\appfastfood\produto\dominio\vo\PrecoTest.class
