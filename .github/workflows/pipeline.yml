@@ -2,7 +2,7 @@ name: pipeline
 on:
   push:
     branches:
-      - featureLina
+      - master
 
 jobs:
   teste-unitario:
