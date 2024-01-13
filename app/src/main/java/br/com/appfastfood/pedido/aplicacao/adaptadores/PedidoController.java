@@ -39,7 +39,7 @@ public class PedidoController {
                         @ApiResponse(responseCode = "201", description = "pedido cadastrado com sucesso", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<?> criar(@RequestBody PedidoRequisicao pedidoRequisicao) {
+        public ResponseEntity<PedidoRequisicao> criar(@RequestBody PedidoRequisicao pedidoRequisicao) {
 
                 String id = this.pedidoServico.criar(pedidoRequisicao, "RECEBIDO", "1:00");
                 return ResponseEntity.status(HttpStatus.CREATED)
@@ -53,24 +53,24 @@ public class PedidoController {
                         @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso", content = {
                                         @Content() }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<?> atualizarStatus(@PathVariable("id") Long id) {
+        public ResponseEntity<Pedido> atualizarStatus(@PathVariable("id") Long id) {
 
                 Pedido pedidoRetorno = this.pedidoServico.atualizar(id);
 
-                PedidoRequisicao pedidoResposta = PedidoRequisicao
-                                .builder()
-                                .produtos(pedidoRetorno.getProdutos().stream()
-                                                .map(produto -> ProdutosReq.builder()
-                                                                .idProduto(produto.getIdProduto())
-                                                                .quantidadeProduto(
-                                                                                produto.getQuantidadeProduto())
-                                                                .build())
-                                                .collect(Collectors.toList()))
-                                .idCliente(pedidoRetorno.getCliente())
-                                .tempoEspera(pedidoRetorno.getTempoEspera())
-                                .valorTotal(pedidoRetorno.getValorTotal())
-                                .status(StatusPedidoEnum.retornaNomeEnum(pedidoRetorno.getStatus()))
-                                .idPedido(pedidoRetorno.getId().toString()).build();
+//                PedidoRequisicao pedidoResposta = PedidoRequisicao
+//                                .builder()
+//                                .produtos(pedidoRetorno.getProdutos().stream()
+//                                                .map(produto -> ProdutosReq.builder()
+//                                                                .idProduto(produto.getIdProduto())
+//                                                                .quantidadeProduto(
+//                                                                                produto.getQuantidadeProduto())
+//                                                                .build())
+//                                                .collect(Collectors.toList()))
+//                                .idCliente(pedidoRetorno.getCliente())
+//                                .tempoEspera(pedidoRetorno.getTempoEspera())
+//                                .valorTotal(pedidoRetorno.getValorTotal())
+//                                .status(StatusPedidoEnum.retornaNomeEnum(pedidoRetorno.getStatus()))
+//                                .idPedido(pedidoRetorno.getId().toString()).build();
 
                 return ResponseEntity.status(HttpStatus.OK).body(pedidoRetorno);
         }
@@ -82,7 +82,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity buscarPedidoPorID(@PathVariable(value = "id") Long id) throws JsonProcessingException {
+        public ResponseEntity<PedidoRequisicao> buscarPedidoPorID(@PathVariable(value = "id") Long id) throws JsonProcessingException {
 
                 Pedido pedidoRetorno = this.pedidoServico.buscarPedidoPorId(id);
 
@@ -116,7 +116,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<Object> listarPedidos() throws JsonProcessingException {
+        public ResponseEntity<List<PedidoRequisicao>> listarPedidos() throws JsonProcessingException {
 
                 List<Pedido> pedidos = this.pedidoServico.listarTodosPedidos();
                 List<PedidoRequisicao> pedidoRespostas = new ArrayList<>();
@@ -155,7 +155,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity buscarStatusPagamento(@PathVariable(value = "id") Long id)
+        public ResponseEntity<PedidoRequisicao> buscarStatusPagamento(@PathVariable(value = "id") Long id)
                         throws JsonProcessingException {
 
                 Pedido pedido = this.pedidoServico.buscarPedidoPorId(id);

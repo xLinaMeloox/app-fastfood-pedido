@@ -23,6 +23,7 @@ jobs:
     - name: Entra na pasta App
       run: |
         cd app
+        rm -rf target
         mvn clean install 
    # - name: Exectar testes unitarios
   #    run: |
