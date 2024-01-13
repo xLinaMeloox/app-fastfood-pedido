@@ -17,7 +17,7 @@
 		<java.version>17</java.version>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>caikeburgos</sonar.organization>
-        <sonar.projectKey>caikeburgos_app-fastfood-application</sonar.projectKey>
+        <sonar.projectKey>caikeburgos_app-fastfood-lina</sonar.projectKey>
 	</properties>
 	<dependencies>
 		<dependency>
