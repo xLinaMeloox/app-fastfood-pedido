@@ -23,7 +23,15 @@ jobs:
     - name: Entra na pasta App
       run: |
         cd app
-
+        mvn clean install 
+        cd target
+        mkdir app
+        ls -la
+        chmod 777 app
+        mv *.jar app
+        cd app
+        mv *.jar app-fastfood.jar
+        ls -la 
    # - name: Exectar testes unitarios
   #    run: |
    #    cd app
