@@ -157,4 +157,4 @@ jobs:
        context: .
        file: ${{ github.workspace }}/app/Dockerfile
        push: true
-       tags: ${{ secrets.DOCKERHUB_USERNAME }}/appShakirafastfood:latest
+       tags: ${{ secrets.DOCKERHUB_USERNAME }}/appshakirafastfood:latest
