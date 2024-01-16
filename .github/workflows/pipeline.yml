@@ -65,6 +65,7 @@ jobs:
     - name: Navigate to the app directory
       run: |
         cd app
+        mvn clean install -U
 
     - name: Build and analyze
       env:
