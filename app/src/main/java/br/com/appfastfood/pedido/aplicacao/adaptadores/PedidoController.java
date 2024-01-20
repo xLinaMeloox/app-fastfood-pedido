@@ -24,10 +24,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+
 @RequestMapping("/pedidos")
 @Tag(name = "Pedidos", description = "Tudo sobre pedidos")
 public class PedidoController {
         private PedidoServico pedidoServico;
+        private final PedidoFeignClient pedidoFeignClient;
+
+
+        @Autowired
+        public PedidoController(PedidoFeignClient pedidoFeignClient) {
+                this.pedidoFeignClient = pedidoFeignClient;
+        }
 
         public PedidoController(PedidoServico pedidoServico) {
                 this.pedidoServico = pedidoServico;
@@ -40,10 +48,18 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
         public ResponseEntity<PedidoRequisicao> criar(@RequestBody PedidoRequisicao pedidoRequisicao) {
+                ResponseEntity<String> resposta = pedidoFeignClient.criarPedido(pedidoRequisicao);
 
-                String id = this.pedidoServico.criar(pedidoRequisicao, "RECEBIDO", "1:00");
-                return ResponseEntity.status(HttpStatus.CREATED)
-                                .body(PedidoRequisicao.builder().idPedido(id).build());
+                if (resposta.getStatusCode().is2xxSuccessful()) {
+                        return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(PedidoRequisicao.builder().idPedido(resposta.getBody()).build());
+                } else {
+                        // Lógica para tratar erros
+                      return null;  //return ResponseEntity.status(resposta.getStatusCode()).build();
+                }
+              //  String id = this.pedidoServico.criar(pedidoRequisicao, "RECEBIDO", "1:00");
+              //  return ResponseEntity.status(HttpStatus.CREATED)
+                     //           .body(PedidoRequisicao.builder().idPedido(id).build());
 
         }
 

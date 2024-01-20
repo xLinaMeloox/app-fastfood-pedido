@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
+@EnableFeignClients
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(
 		title = "API - Fast Food",
