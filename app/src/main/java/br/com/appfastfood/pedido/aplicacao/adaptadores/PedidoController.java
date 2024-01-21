@@ -7,6 +7,7 @@ import br.com.appfastfood.pedido.aplicacao.adaptadores.resposta.PedidoResposta;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
+import br.com.appfastfood.pedido.usecase.portas.PedidoFeignClient;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +39,9 @@ public class PedidoController {
                 this.pedidoFeignClient = pedidoFeignClient;
         }
 
-        public PedidoController(PedidoServico pedidoServico) {
+        public PedidoController(PedidoServico pedidoServico, PedidoFeignClient pedidoFeignClient) {
                 this.pedidoServico = pedidoServico;
+                this.pedidoFeignClient = pedidoFeignClient;
         }
 
         @PostMapping

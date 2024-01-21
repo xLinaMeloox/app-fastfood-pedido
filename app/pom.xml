@@ -39,11 +39,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -52,21 +47,20 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>3.12.14</version>
-		</dependency>
-
+<!--		<dependency>-->
+<!--			<groupId>org.mongodb</groupId>-->
+<!--			<artifactId>mongo-java-driver</artifactId>-->
+<!--			<version>3.12.14</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
@@ -124,6 +118,32 @@
 						<spring.data.mongodb.ssl.trust-store>global.pem</spring.data.mongodb.ssl.trust-store>
 						<spring.datasource.hikari.validation-timeout>5000</spring.datasource.hikari.validation-timeout>
 					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/*Runner*</exclude>
+						<exclude>**/*Configuration*</exclude>
+						<exclude>**/*Log*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>

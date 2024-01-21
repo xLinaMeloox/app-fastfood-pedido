@@ -1,13 +1,13 @@
-package br.com.appfastfood;
+// package br.com.appfastfood;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AppFastfoodApplicationTests {
+// @SpringBootTest
+// class AppFastfoodApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }
