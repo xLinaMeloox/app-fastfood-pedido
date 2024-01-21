@@ -1,5 +1,6 @@
 package br.com.appfastfood.pedido.usecase.adaptadores;
 
+import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
@@ -52,7 +53,23 @@ public class PedidoServicoImpl implements PedidoServico {
                 StatusPedidoEnum.buscaEnumPorStatusString(status), tempo, StatusPagamentoEnum.PENDENTE);
 
         return this.pedidoRepositorio.criar(pedido);
+    }
+    public String criar(List<Carrinho> carrinho) {
+        String idsCriados = "";
 
+        Pedido pedido = new Pedido(null,null,null,null,null,null,null);
+        for (Carrinho listaCarrinho : carrinho) {
+        List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
+            ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
+            produtosVO.add(produtoVO);
+            pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
+                    StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "1", StatusPagamentoEnum.PENDENTE);
+
+            idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
+        }
+
+
+    return idsCriados;
         
     }
 

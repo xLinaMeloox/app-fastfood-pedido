@@ -1,5 +1,7 @@
 package br.com.appfastfood.pedido.aplicacao.adaptadores;
 
+import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
+import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.RequisicaoExcecao;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
@@ -28,9 +30,10 @@ import java.util.stream.Collectors;
 @Tag(name = "Pedidos", description = "Tudo sobre pedidos")
 public class PedidoController {
         private PedidoServico pedidoServico;
-
-        public PedidoController(PedidoServico pedidoServico) {
+        private CarrinhoClient carrinhoClient;
+        public PedidoController(PedidoServico pedidoServico, CarrinhoClient carrinhoClient) {
                 this.pedidoServico = pedidoServico;
+                this.carrinhoClient = carrinhoClient;
         }
 
         @PostMapping
@@ -39,12 +42,12 @@ public class PedidoController {
                         @ApiResponse(responseCode = "201", description = "pedido cadastrado com sucesso", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<?> criar(@RequestBody PedidoRequisicao pedidoRequisicao) {
+        public ResponseEntity criar() {
 
-                String id = this.pedidoServico.criar(pedidoRequisicao, "RECEBIDO", "1:00");
-                return ResponseEntity.status(HttpStatus.CREATED)
+                List<Carrinho> carrinho = carrinhoClient.getCarrinho();
+                String id = this.pedidoServico.criar(carrinho);
+                                return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(PedidoRequisicao.builder().idPedido(id).build());
-
         }
 
         @PutMapping("/{id}")
