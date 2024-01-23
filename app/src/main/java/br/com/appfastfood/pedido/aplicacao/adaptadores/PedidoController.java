@@ -103,7 +103,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<Object> listarPedidos() throws JsonProcessingException {
+        public ResponseEntity<List<PedidoRequisicao>> listarPedidos() throws JsonProcessingException {
 
                 List<Pedido> pedidos = this.pedidoServico.listarTodosPedidos();
                 List<PedidoRequisicao> pedidoRespostas = new ArrayList<>();
@@ -142,7 +142,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity buscarStatusPagamento(@PathVariable(value = "id") Long id)
+        public ResponseEntity<PedidoRequisicao> buscarStatusPagamento(@PathVariable(value = "id") Long id)
                         throws JsonProcessingException {
 
                 Pedido pedido = this.pedidoServico.buscarPedidoPorId(id);
