@@ -1,183 +1,131 @@
-//package br.com.appfastfood.pedido.aplicacao.adaptadores;
-//
-//import br.com.appfastfood.configuracoes.execption.BadRequestException;
-//import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
-//import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
-//import br.com.appfastfood.pedido.dominio.modelos.Pedido;
-//import br.com.appfastfood.pedido.dominio.modelos.VO.ProdutoVO;
-//import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
-//import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
-//import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
-//import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.mockito.ArgumentMatchers.eq;
-//import static org.mockito.Mockito.when;
-//
-// public class PedidoControllerTest {
-//  @Mock
-//  private PedidoServico pedidoServico;
-//
-//  @InjectMocks
-//  private PedidoController pedidoController;
-//
-//  @BeforeEach
-//  void setUp() {
-//   MockitoAnnotations.openMocks(this);
-//  }
-//
-//  @Test
-//  void criar_DeveRetornarPedidoCriado() throws JsonProcessingException {
-//   // Dados de entrada
-//   PedidoRequisicao pedidoRequisicao = PedidoRequisicao.builder()
-//           .produtos(Arrays.asList(ProdutosReq.builder()
-//                   .idProduto("1")
-//                   .quantidadeProduto("2")
-//                   .build()))
-//           .idCliente("123")
-//           .valorTotal(10.0)
-//           .status("RECEBIDO")
-//           .tempoEspera("1:00")
-//           .idPedido(null)
-//           .build();
-//
-//   // Mock do serviço
-//   when(pedidoServico.criar(eq(pedidoRequisicao), eq("RECEBIDO"), eq("1:00")))
-//           .thenReturn("123456789");
-//
-//   // Execução do método
-//   ResponseEntity<?> responseEntity = pedidoController.criar(pedidoRequisicao);
-//
-//   // Verificações
-//   assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-//   PedidoRequisicao responseBody = (PedidoRequisicao) responseEntity.getBody();
-//   assertEquals("123456789", responseBody.getIdPedido());
-//  }
-//
-//  @Test
-//  void criar_DeveRetornarBadRequestQuandoIDNaoEncontradoException() throws  JsonProcessingException {
-//   // Dados de entrada
-//   Long idPedido = 123L;
-//
-//   // Mock do serviço lançando exceção
-//   when(pedidoServico.atualizar(eq(idPedido))).thenThrow(new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue()).getClass());
-//
-//   // Execução do método
-//   assertThrows(BadRequestException.class, () -> pedidoServico.atualizar(idPedido));
-//
-//
-//  }
-//
-//  @Test
-//  void criar_DeveRetornarBadRequestQuandoPagamentoNaoRealizado() throws JsonProcessingException {
-//   // Dados de entrada
-//   PedidoRequisicao pedidoRequisicao = PedidoRequisicao.builder()
-//           .produtos(Arrays.asList(ProdutosReq.builder()
-//                   .idProduto("1")
-//                   .quantidadeProduto("2")
-//                   .build()))
-//           .idCliente("123")
-//           .valorTotal(10.0)
-//           .status("RECEBIDO")
-//           .tempoEspera("1:00")
-//           .idPedido(null)
-//           .build();
-//
-//   // Mock do serviço lançando exceção
-//   when(pedidoServico.criar(eq(pedidoRequisicao), eq("RECEBIDO"), eq("1:00")))
-//           .thenThrow(new BadRequestException(ExceptionsMessages.PAGAMENTO_RECUSADO.getValue()).getClass());
-//
-//   // Execução do método
-//   assertThrows(BadRequestException.class, () -> pedidoController.criar(pedidoRequisicao));
-//
-//  }
-//
-//
-//
-//  @Test
-//  void atualizarStatus_DeveRetornarBadRequestQuandoIDPedidoNaoEncontradoException() throws JsonProcessingException {
-//   // Dados de entrada
-//   Long idPedido = 123L;
-//
-//   // Mock do serviço lançando exceção
-//   when(pedidoServico.atualizar(eq(idPedido))).thenThrow(new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue()).getClass());
-//
-//   // Execução do método
-//   assertThrows(BadRequestException.class, () -> pedidoServico.atualizar(idPedido));
-//
-//   //
-//
-//  }
-//
-//  @Test
-//  void atualizarStatus_DeveRetornarBadRequestQuandoPedidoJaFinalizadoException() throws  JsonProcessingException {
-//   // Dados de entrada
-//   Long idPedido = 123L;
-//
-//   // Mock do serviço lançando exceção
-//   when(pedidoServico.atualizar(eq(idPedido))).thenThrow(new BadRequestException(ExceptionsMessages.PEDIDO_JA_FINALIZADO.getValue()).getClass());
-//
-//   // Execução do método
-//   assertThrows(BadRequestException.class, () -> pedidoServico.atualizar(idPedido));
-//
-//   // Verificações
-//
-//
-//  }
-//
-//
-//
-//  @Test
-//  void buscarPedidoPorID_DeveRetornarBadRequestQuandoIDPedidoNaoEncontradoException() throws JsonProcessingException {
-//   // Dados de entrada
-//   Long idPedido = 123L;
-//
-//   // Mock do serviço lançando exceção
-//   when(pedidoServico.buscarPedidoPorId(eq(idPedido))).thenThrow(new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue()).getClass());
-//
-//   // Execução do método
-//   assertThrows(BadRequestException.class, () -> pedidoController.buscarPedidoPorID(idPedido));
-//
-//
-//
-//  }
-//
-//  private Pedido criarPedido() {
-//   Pedido pedido = new Pedido(Arrays.asList(
-//           new ProdutoVO("1", "5.0"),
-//           new ProdutoVO("2", "3.0")
-//   ), "123", 10.0, StatusPedidoEnum.RECEBIDO, "1:00", StatusPagamentoEnum.PENDENTE);
-//   return pedido;
-//  }
-//
-//  private void assertPedidoRequisicaoEqualsPedido(Pedido pedido, PedidoRequisicao pedidoRequisicao) {
-//   assertEquals(pedido.getId().toString(), pedidoRequisicao.getIdPedido());
-//   assertEquals(pedido.getCliente(), pedidoRequisicao.getIdCliente());
-//   assertEquals(pedido.getValorTotal(), pedidoRequisicao.getValorTotal());
-//   assertEquals(pedido.getStatus().getNome(), pedidoRequisicao.getStatus());
-//   assertEquals(pedido.getTempoEspera(), pedidoRequisicao.getTempoEspera());
-//
-//   List<ProdutosReq> produtosReq = pedido.getProdutos().stream()
-//           .map(produto -> ProdutosReq.builder()
-//                   .idProduto(produto.getIdProduto())
-//                   .quantidadeProduto(produto.getQuantidadeProduto())
-//                   .build())
-//           .collect(Collectors.toList());
-//
-//   assertEquals(produtosReq, pedidoRequisicao.getProdutos());
-//  }
-//
-// }
+package br.com.appfastfood.pedido.aplicacao.adaptadores;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
+import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
+import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
+import br.com.appfastfood.pedido.dominio.modelos.Pedido;
+import br.com.appfastfood.pedido.dominio.modelos.VO.ProdutoVO;
+import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
+import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
+import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
+import br.com.appfastfood.pedido.usecase.adaptadores.PedidoServicoImpl;
+import br.com.appfastfood.produto.dominio.modelos.Produto;
+import br.com.appfastfood.produto.dominio.vo.enums.CategoriaEnum;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+class PedidoServicoImplTest {
+
+    private PedidoRepositorio pedidoRepositorioMock;
+    private RestTemplate restTemplateMock;
+    private PedidoServicoImpl pedidoServico;
+
+    @BeforeEach
+    public void setUp() {
+        pedidoRepositorioMock = mock(PedidoRepositorio.class);
+        restTemplateMock = mock(RestTemplate.class);
+        pedidoServico = new PedidoServicoImpl(pedidoRepositorioMock);
+        pedidoServico.setRestTemplate(restTemplateMock);
+    }
+
+    @Test
+    public void criarPedido_DeveRetornarIdDoPedido() {
+        PedidoRequisicao pedidoReq = criarPedidoRequisicaoExemplo();
+        when(pedidoRepositorioMock.criar(any(Pedido.class))).thenReturn("1");
+        when(restTemplateMock.getForObject(anyString(), eq(Produto.class))).thenReturn(criarProdutoExemplo());
+
+        String idPedido = pedidoServico.criar(criarCarrinhoExemplo());
+
+        assertNotNull(idPedido);
+        assertEquals("1,", idPedido);
+    }
+
+    @Test
+    public void criarPedidos_DeveRetornarIdsDosPedidos() {
+        // Arrange
+        List<Carrinho> carrinho = criarCarrinhoExemplo();
+        when(pedidoRepositorioMock.criar(any(Pedido.class))).thenReturn("1");
+        when(restTemplateMock.getForObject(anyString(), eq(Produto.class))).thenReturn(criarProdutoExemplo());
+
+        // Act
+        String idsCriados = pedidoServico.criar(carrinho);
+
+        // Assert
+        assertNotNull(idsCriados);
+        assertEquals("1,", idsCriados);
+    }
+    @Test
+    public void atualizarPedido_DeveRetornarPedidoAtualizado() {
+
+        Long idPedido = 1L;
+        Pedido pedidoMock = criarPedidoConfigurado();
+
+        when(pedidoRepositorioMock.buscarPedidoPorId(idPedido)).thenReturn(pedidoMock);
+        when(pedidoRepositorioMock.atualizar(any(Pedido.class))).thenReturn(pedidoMock);
+
+        Pedido pedidoAtualizado = pedidoServico.atualizar(idPedido);
+
+        assertNotNull(pedidoAtualizado);
+        assertEquals(StatusPedidoEnum.RECEBIDO, pedidoAtualizado.getStatus());
+    }
+
+    public static Pedido criarPedidoConfigurado() {
+        ProdutoVO produtoVO = new ProdutoVO("1", "2");
+        List<ProdutoVO> produtos = List.of(produtoVO);
+
+        return new Pedido(1L, produtos, "123456", 20.0, StatusPedidoEnum.RECEBIDO, "30", StatusPagamentoEnum.PENDENTE);
+    }
+
+
+    private PedidoRequisicao criarPedidoRequisicaoExemplo() {
+        List<ProdutosReq> produtos = Arrays.asList(
+                ProdutosReq.builder()
+                        .idProduto("1")
+                        .quantidadeProduto("2")
+                        .build()
+        );
+
+        return PedidoRequisicao.builder()
+                .produtos(produtos)
+                .idCliente("123456")
+                .valorTotal(20.0)
+                .status("EM_PREPARACAO")
+                .tempoEspera("30")
+                .idPedido("1")
+                .statusPagamento("PENDENTE")
+                .build();
+    }
+
+    private Produto criarProdutoExemplo() {
+        return new Produto(
+                1L,
+                "X-Salada",
+                10.0,
+                "http://imagem.com/xsalada.jpg",
+                CategoriaEnum.lanche,
+                "Delicioso"
+        );
+    }
+
+    private List<Carrinho> criarCarrinhoExemplo() {
+        Carrinho.Produto produto = new Carrinho.Produto("1", 2);
+        List<Carrinho.Produto> produtos = List.of(produto);
+
+        return Collections.singletonList(new Carrinho(
+                1L,
+                "EM_ANDAMENTO",
+                produtos,
+                "123456",
+                20.0
+        ));
+    }
+}
