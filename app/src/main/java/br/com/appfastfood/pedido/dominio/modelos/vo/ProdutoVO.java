@@ -1,4 +1,4 @@
-package br.com.appfastfood.pedido.dominio.modelos.VO;
+package br.com.appfastfood.pedido.dominio.modelos.vo;
 
 public class ProdutoVO {
     private String idProduto;

@@ -2,7 +2,7 @@ package br.com.appfastfood.pedido.infraestrutura;
 
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
-import br.com.appfastfood.pedido.dominio.modelos.VO.ProdutoVO;
+import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
@@ -30,7 +30,6 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
 
     @Override
     public String criar(Pedido pedido) {
-        Double valorTotal = 0D;
         List<ProdEnt> produtosEntidade = new ArrayList<>();
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
@@ -110,7 +109,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     }
 
     @Override
-    public Pedido atualizarPagamento(Pedido pedido) {
+    public Pedido atualizaPagamento(Pedido pedido) {
         List<ProdEnt> produtosEntidade = new ArrayList<>();
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
@@ -121,15 +120,4 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         this.springDataPedidoRepository.save(pedidoDb);
         return pedido;
     }
-//
-//    public Long generateNextId(String collectionName) {
-//        Query query = new Query(Criteria.where("_id").is(collectionName));
-//        Update update = new Update().inc("sequence", 1);
-//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
-//
-//        CustomSequence sequence = mongoTemplate.findAndModify(query, update, options, CustomSequence.class);
-//
-//        return sequence.getSequence();
-//    }
-
 }

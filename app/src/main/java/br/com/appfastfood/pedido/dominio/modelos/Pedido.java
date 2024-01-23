@@ -1,6 +1,6 @@
 package br.com.appfastfood.pedido.dominio.modelos;
 
-import br.com.appfastfood.pedido.dominio.modelos.VO.ProdutoVO;
+import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 
