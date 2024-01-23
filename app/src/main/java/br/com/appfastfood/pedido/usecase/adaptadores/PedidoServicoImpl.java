@@ -1,5 +1,6 @@
 package br.com.appfastfood.pedido.usecase.adaptadores;
 
+import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
@@ -22,37 +23,35 @@ public class PedidoServicoImpl implements PedidoServico {
     private final PedidoRepositorio pedidoRepositorio;
     private RestTemplate restTemplate;
 
-    // private final PagamentoServico pagamentoServico;
-
     public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio) {
 
         this.pedidoRepositorio = pedidoRepositorio;
     }
-
-    // public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, ProdutoServico
-    // produtoServicoImplInject, PagamentoServico pagamentoServico) {
-    //
-    // this.pedidoRepositorio = pedidoRepositorio;
-    // this.produtoServicoImplInject = produtoServicoImplInject;
-    // this.pagamentoServico = pagamentoServico;
-    // }
+    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, RestTemplate restTemplate) {
+        this.pedidoRepositorio = pedidoRepositorio;
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public String criar(PedidoRequisicao pedidoReq, String status, String tempo) {
-        Produto produtoBuscaId = null;
-        Double valorTotal = 0.0;
+        return null;
+    }
+    public String criar(List<Carrinho> carrinho) {
+        String idsCriados = "";
+
+        Pedido pedido = new Pedido(null,null,null,null,null,null,null);
+        for (Carrinho listaCarrinho : carrinho) {
         List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
-        for (ProdutosReq produtoReq : pedidoReq.getProdutos()) {
-            ProdutoVO produtoVO = new ProdutoVO(produtoReq.getIdProduto(), produtoReq.getQuantidadeProduto());
-            produtoBuscaId = buscarProdutoPorId(1L);
-            valorTotal += produtoBuscaId.getPreco() * Double.parseDouble(produtoReq.getQuantidadeProduto());
+            ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
             produtosVO.add(produtoVO);
+            pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
+                    StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "1", StatusPagamentoEnum.PENDENTE);
+
+            idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
         }
-        Pedido pedido = new Pedido(produtosVO, pedidoReq.getIdCliente(), valorTotal,
-                StatusPedidoEnum.buscaEnumPorStatusString(status), tempo, StatusPagamentoEnum.PENDENTE);
 
-        return this.pedidoRepositorio.criar(pedido);
 
+    return idsCriados;
         
     }
 
@@ -86,22 +85,6 @@ public class PedidoServicoImpl implements PedidoServico {
         return null;
     }
 
-    public Produto buscarProdutoPorId(Long id) {
-        Produto mock = new Produto(1L, "xsalada", 2D, "jhjh", null, "delicia");
-
-//        String url = "https://api-produtos.com/produtos/" + id;
-//
-//        Produto produto = restTemplate.getForObject(url, Produto.class);
-
-        return mock;
-    }
-
-//    @Override
-//    public Pedido buscarPedidoPorId(Long id) {
-//        Pedido pedido = this.pedidoRepositorio.buscarPedidoPorId(id);
-//        return popularProdutoVo(pedido);
-//    }
-
     @Override
     public List<Pedido> listarTodosPedidos() {
 
@@ -117,31 +100,15 @@ public class PedidoServicoImpl implements PedidoServico {
         listaTotal.addAll(listaPronto);
         listaTotal.addAll(listaEmPreparacao);
         listaTotal.addAll(listaEmRecebibo);
-
-//        listaTotal.stream().forEach(pedido -> {
-//            pedido = popularProdutoVo(pedido);
-//        });
-
         return listaTotal;
     }
 
-    private StatusPagamentoEnum atualizarPagamento(Long id) {
-        // return pagamentoServico.realizarPagemto(id);
+    public StatusPagamentoEnum atualizarPagamento(Long id) {
         return StatusPagamentoEnum.APROVADO;
     }
 
-//    private Pedido popularProdutoVo(Pedido pedido) {
-//
-//        pedido.getProdutos().stream().forEach(prod -> {
-//            Produto produtoResposta = produtoServicoImplInject.buscaProdutoPorId(Long.parseLong(prod.getIdProduto()));
-//            prod.setNome(produtoResposta.getNome().getNome());
-//            prod.setCategoria(produtoResposta.getCategoria().name());
-//            prod.setPreco(produtoResposta.getPreco().getPreco());
-//            prod.setUriImagem(produtoResposta.getUriImagem().getUriImagem());
-//        });
-//
-//        return pedido;
-//    }
-
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
 }
