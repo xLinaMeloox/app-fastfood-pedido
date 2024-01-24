@@ -3,15 +3,13 @@ package br.com.appfastfood.pedido.usecase.adaptadores;
 import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
-import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
-import br.com.appfastfood.pedido.dominio.modelos.VO.ProdutoVO;
+import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
-import br.com.appfastfood.produto.dominio.modelos.Produto;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;

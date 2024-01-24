@@ -42,7 +42,7 @@ public class PedidoController {
                         @ApiResponse(responseCode = "201", description = "pedido cadastrado com sucesso", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity criar() {
+        public ResponseEntity<PedidoRequisicao> criar() {
 
                 List<Carrinho> carrinho = carrinhoClient.getCarrinho();
                 String id = this.pedidoServico.criar(carrinho);

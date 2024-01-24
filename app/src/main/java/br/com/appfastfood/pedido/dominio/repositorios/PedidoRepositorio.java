@@ -10,5 +10,5 @@ public interface PedidoRepositorio {
     List<Pedido> listarTodosOsPedidos();
     Pedido buscarPedidoPorId(Long id);
     Boolean realizarPagamento();
-    Pedido atualizarPagamento(Pedido pedido);
+    Pedido atualizaPagamento(Pedido pedido);
 } 
