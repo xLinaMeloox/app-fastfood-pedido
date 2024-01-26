@@ -30,10 +30,8 @@ import java.util.stream.Collectors;
 @Tag(name = "Pedidos", description = "Tudo sobre pedidos")
 public class PedidoController {
         private PedidoServico pedidoServico;
-        private CarrinhoClient carrinhoClient;
-        public PedidoController(PedidoServico pedidoServico, CarrinhoClient carrinhoClient) {
+        public PedidoController(PedidoServico pedidoServico) {
                 this.pedidoServico = pedidoServico;
-                this.carrinhoClient = carrinhoClient;
         }
 
         @PostMapping
@@ -43,9 +41,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
         public ResponseEntity<PedidoRequisicao> criar() {
-
-                List<Carrinho> carrinho = carrinhoClient.getCarrinho();
-                String id = this.pedidoServico.criar(carrinho);
+                String id = this.pedidoServico.criar();
                                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(PedidoRequisicao.builder().idPedido(id).build());
         }
@@ -76,7 +72,7 @@ public class PedidoController {
                 PedidoRequisicao pedidoResposta = PedidoRequisicao
                                 .builder()
                                 .produtos(pedidoRetorno.getProdutos().stream()
-                                                .map(produto -> ProdutosReq.builder()
+                                        .map(produto -> ProdutosReq.builder()
                                                                 .idProduto(produto.getIdProduto())
                                                                 .quantidadeProduto(
                                                                                 produto.getQuantidadeProduto())
@@ -136,26 +132,16 @@ public class PedidoController {
         }
 
         @GetMapping("/{id}/status_pagamento")
-        @Operation(summary = "Buscar status pagamento", description = "Funcionalidade o status do pagamento do pedido por id.")
+        @Operation(summary = "Pagar", description = "Funcionalidade de pagar o pedido.")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Pedidos filtrados com sucesso", content = {
+                        @ApiResponse(responseCode = "200", description = "Pagamento aprovado", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = List.class, subTypes = {
                                                         PedidoRequisicao.class })) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<PedidoRequisicao> buscarStatusPagamento(@PathVariable(value = "id") Long id)
+        public ResponseEntity<StatusPagamentoEnum> pagar(@PathVariable(value = "id") Long id)
                         throws JsonProcessingException {
-
-                Pedido pedido = this.pedidoServico.buscarPedidoPorId(id);
-
-                PedidoRequisicao pedidoResposta = PedidoRequisicao
-                                .builder()
-                                .idPedido(pedido.getId().toString())
-                                .statusPagamento(StatusPagamentoEnum
-                                                .retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()))
-                                .build();
-
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pedidoResposta);
-
+                StatusPagamentoEnum retorno = this.pedidoServico.atualizarPagamento(id);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(retorno);
         }
 
 }
