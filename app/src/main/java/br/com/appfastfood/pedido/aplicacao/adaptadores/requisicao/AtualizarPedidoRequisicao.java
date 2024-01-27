@@ -13,8 +13,4 @@ public class AtualizarPedidoRequisicao {
     public StatusPedidoEnum getStatus() {
         return status;
     }
-
-
-
-    
 }
