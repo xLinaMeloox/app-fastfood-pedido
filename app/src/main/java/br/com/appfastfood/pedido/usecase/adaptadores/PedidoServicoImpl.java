@@ -23,14 +23,11 @@ import java.util.stream.Collectors;
 public class PedidoServicoImpl implements PedidoServico {
 
     private final PedidoRepositorio pedidoRepositorio;
-    //private RestTemplate restTemplate;
     private final CarrinhoClient carrinhoClient;
-    private final PagamentoClient pagamentoClient;
 
-    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, CarrinhoClient carrinhoClient, PagamentoClient pagamentoClient) {
+    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, CarrinhoClient carrinhoClient) {
         this.pedidoRepositorio = pedidoRepositorio;
         this.carrinhoClient = carrinhoClient;
-        this.pagamentoClient = pagamentoClient;
     }
 
     @Override
@@ -60,6 +57,12 @@ public class PedidoServicoImpl implements PedidoServico {
         if (pedidoBusca == null) {
             throw new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue());
         }
+        if (pedidoBusca.getStatusPagamento() == StatusPagamentoEnum.RECUSADO){
+            throw new BadRequestException(ExceptionsMessages.PAGAMENTO_NAO_FOI_APROVADO.getValue());
+        }
+        if (pedidoBusca.getStatusPagamento() == StatusPagamentoEnum.PENDENTE){
+            throw new BadRequestException(ExceptionsMessages.PAGAMENTO_PENDENTE.getValue());
+        }
 
         if (pedidoBusca.getStatus() == StatusPedidoEnum.RECEBIDO) {
             pedido = new Pedido(
@@ -88,13 +91,13 @@ public class PedidoServicoImpl implements PedidoServico {
 
         List<Pedido> listaTotal = this.pedidoRepositorio.listarTodosOsPedidos();
         List<Pedido> listaEmPreparacao = listaTotal.stream()
-                .filter(ped -> ped.getStatus() == StatusPedidoEnum.EM_PREPARACAO).collect(Collectors.toList());
+                .filter(ped -> ped.getStatus() == StatusPedidoEnum.EM_PREPARACAO).toList();
         List<Pedido> listaPronto = listaTotal.stream().filter(ped -> ped.getStatus() == StatusPedidoEnum.PRONTO)
-                .collect(Collectors.toList());
+                .toList();
         List<Pedido> listaEmRecebibo = listaTotal.stream().filter(ped -> ped.getStatus() == StatusPedidoEnum.RECEBIDO)
-                .collect(Collectors.toList());
+                .toList();
 
-        listaTotal = new ArrayList();
+        listaTotal = new ArrayList<>();
         listaTotal.addAll(listaPronto);
         listaTotal.addAll(listaEmPreparacao);
         listaTotal.addAll(listaEmRecebibo);

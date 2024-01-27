@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    PedidoServico pedidoServico(PedidoRepositorio pedidoRepositorio, CarrinhoClient carrinhoClient, PagamentoClient pagamentoClient){
-        return new PedidoServicoImpl(pedidoRepositorio, carrinhoClient, pagamentoClient);
+    PedidoServico pedidoServico(PedidoRepositorio pedidoRepositorio, CarrinhoClient carrinhoClient){
+        return new PedidoServicoImpl(pedidoRepositorio, carrinhoClient);
     }
     @Bean
     Log log(){
