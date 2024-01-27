@@ -1,52 +1,29 @@
 package br.com.appfastfood.configuracoes;
 
-import br.com.appfastfood.AppFastfoodApplication;
-import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
 import br.com.appfastfood.configuracoes.logs.Log;
-import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class BeanConfigurationTest {
 
-    @Mock
-    private PedidoRepositorio pedidoRepositorio;
+    @Autowired
+    private PedidoServico pedidoServico;
 
-    @Mock
-    private CarrinhoClient carrinhoClient;
+    @Autowired
+    private Log log;
 
     @Test
-    void pedidoServico_BeanDeveSerCriadoCorretamente() {
-        // Arrange
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(BeanConfiguration.class);
-        context.refresh();
-
-        // Act
-        PedidoServico pedidoServico = context.getBean("pedidoServicoImpl", PedidoServico.class);
-
-        // Assert
-        assertNotNull(pedidoServico);
+    void testPedidoServicoBean() {
+        assertThat(pedidoServico).isNotNull();
     }
 
     @Test
-    void log_BeanDeveSerCriadoCorretamente() {
-        // Arrange
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(BeanConfiguration.class);
-        context.refresh();
-
-        // Act
-        Log log = context.getBean(Log.class);
-
-        // Assert
-        assertNotNull(log);
+    void testLogBean() {
+        assertThat(log).isNotNull();
     }
-
 }
