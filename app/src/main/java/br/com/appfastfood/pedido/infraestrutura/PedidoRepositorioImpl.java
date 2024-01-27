@@ -47,7 +47,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     }
 
     @Override
-    public Pedido atualizar(Pedido pedido) {
+    public Pedido atualizar(Pedido pedido){
         List<ProdEnt> produtosEntidade = new ArrayList<>();
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));

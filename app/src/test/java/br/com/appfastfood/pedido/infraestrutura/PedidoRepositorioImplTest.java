@@ -11,6 +11,7 @@ import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.infraestrutura.entidades.PedidoEntidade;
 import br.com.appfastfood.pedido.infraestrutura.entidades.ProdEnt;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,6 +142,64 @@ class PedidoRepositorioImplTest {
         // Assert
         assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
     }
+
+    @Test
+    public void realizarPagamento_QuandoPagamentoAprovado_DeveRetornarStatusAprovado() {
+        // Arrange
+        Long idPedido = 1L;
+        PedidoEntidade pedidoEntidade = mockPedidoEntidade();
+        pedidoEntidade.setId(idPedido);
+        when(springDataPedidoRepository.findById(idPedido)).thenReturn(Optional.of(pedidoEntidade));
+
+        PagamentoRequisicao requisicao = PagamentoRequisicao.builder()
+                .meioPagamento("Cartao")
+                .idMeioPagamento("1234567891011121")
+                .valor(100.0) // Valor do pedido
+                .build();
+        Pagamentos pagamentoRetorno = mockPagamentos("APROVADO");
+        when(pagamentoClient.fazerPagamento(requisicao)).thenReturn(pagamentoRetorno);
+
+        // Act
+        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.APROVADO;
+
+        // Assert
+        Assertions.assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
+    }
+
+    @Test
+    public void realizarPagamento_QuandoPagamentoRecusado_DeveRetornarStatusRecusado() {
+        // Arrange
+        Long idPedido = 1L;
+        PedidoEntidade pedidoEntidade = mockPedidoEntidade();
+        pedidoEntidade.setId(idPedido);
+        when(springDataPedidoRepository.findById(idPedido)).thenReturn(Optional.of(pedidoEntidade));
+
+        PagamentoRequisicao requisicao = PagamentoRequisicao.builder()
+                .meioPagamento("Cartao")
+                .idMeioPagamento("1234567891011121")
+                .valor(100.0) // Valor do pedido
+                .build();
+        Pagamentos pagamentoRetorno = mockPagamentos("RECUSADO");
+        when(pagamentoClient.fazerPagamento(requisicao)).thenReturn(pagamentoRetorno);
+
+        // Act
+        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.RECUSADO;
+
+        // Assert
+        Assertions.assertEquals(StatusPagamentoEnum.RECUSADO, statusPagamento);
+    }
+
+    @Test
+    public void listarTodosOsPedidos_QuandoNaoHaPedidos_DeveLancarExcecao() {
+        // Arrange
+        when(springDataPedidoRepository.findNotInFinalzado()).thenReturn(Collections.emptyList());
+
+        // Act & Assert
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            pedidoRepositorio.listarTodosOsPedidos();
+        });
+    }
+
 
     private Pedido mockPedido() {
         List<ProdutoVO> produtos = new ArrayList<>();
