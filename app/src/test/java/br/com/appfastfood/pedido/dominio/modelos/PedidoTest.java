@@ -1,5 +1,6 @@
 package br.com.appfastfood.pedido.dominio.modelos;
 
+import br.com.appfastfood.configuracoes.client.pagamento.Pagamentos;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
@@ -87,17 +88,16 @@ class PedidoTest {
         assertEquals(StatusPagamentoEnum.PENDENTE, pedidoAtualizado.getStatusPagamento());
     }
 
-//    @Test
-//    public void testSetStatusPagamento() {
-//        // Cria uma instância da sua classe
-//        SuaClasse suaClasse = new SuaClasse();
-//
-//        // Define um status de pagamento
-//        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.PAGO;
-//        suaClasse.setStatusPagamento(statusPagamento);
-//
-//        // Testa se o status de pagamento foi definido corretamente
-//        assertEquals(statusPagamento, suaClasse.getStatusPagamento());
-//    }
+    @Test
+    void testSetStatusPagamento() {
+        // Cria uma instância da sua classe
+        Pagamentos pagamento = new Pagamentos("APROVADO");
+
+        // Define um status de pagamento
+        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.APROVADO;
+
+        // Testa se o status de pagamento foi definido corretamente
+        assertEquals(statusPagamento.getNome(), pagamento.status());
+    }
 
 }
