@@ -134,6 +134,8 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
                 StatusPedidoEnum.buscaEnumPorStatusString(pedidoEntidadeBusca.get().getStatus()),
                 pedidoEntidadeBusca.get().getTempoEspera(),
                 statusPgto);
+        this.atualizar(pedidoRetorno);
+
         return statusPgto;
     }
 }

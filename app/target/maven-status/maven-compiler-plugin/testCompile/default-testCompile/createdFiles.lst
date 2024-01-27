@@ -3,6 +3,7 @@ br\com\appfastfood\CucumberRunnerTest.class
 br\com\appfastfood\usecase\PedidoService.class
 br\com\appfastfood\AppFastfoodApplicationTests.class
 br\com\appfastfood\configuracoes\CucumberSpringConfiguration.class
+br\com\appfastfood\pedido\infraestrutura\PedidoRepositorioImplTest.class
 br\com\appfastfood\stepdefinitions\PedidoStepDefinitions.class
 br\com\appfastfood\usecase\CarrinhoService.class
 br\com\appfastfood\pedido\aplicacao\adaptadores\PedidoControllerTest.class

@@ -71,4 +71,7 @@ public class PedidoEntidade {
         return statusPagamento;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
