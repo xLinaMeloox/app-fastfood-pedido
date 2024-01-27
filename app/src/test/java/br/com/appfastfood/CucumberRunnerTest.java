@@ -1,7 +1,7 @@
 package br.com.appfastfood;
 
 
-import br.com.appfastfoodpagamentos.config.CucumberSpringConfiguration;
+import br.com.appfastfood.configuracoes.CucumberSpringConfiguration;
 
 import org.junit.platform.suite.api.*;
 

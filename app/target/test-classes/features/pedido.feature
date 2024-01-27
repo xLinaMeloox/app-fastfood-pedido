@@ -2,8 +2,8 @@
 Funcionalidade: Criar pedido
 
   Cenário: Criar pedido com sucesso
-    Dado que o status do carrinho estiver fechado
-    Então o pedido será gerado com sucesso
+    Dado que a api de carrinho retornou um carrinho fechado
+    Então o pedido será criado
 
   Cenário: Atualizar status de pagamento
     Dado que o status do pagamento esteja aprovado
@@ -18,10 +18,12 @@ Funcionalidade: Criar pedido
     Então o status do pedido será atualizado para cancelado
 
   Cenário: Atualização do status do pedido em preparação
-    Dado que status do pedido estiver
-    Então o status do pedido será atualizado em produção
-    Quando o status do pagamento for reprovado
-    Então o status do pedido será atualizado para cancelado
+    Dado que status do pedido estiver preparação
+    Então o status do pedido será atualizado em pronto
+
+  Cenário: Atualização do status do pedido em pronto
+   Dado que status do pedido estiver pronto
+   Então o status do pedido será atualizado em finalizado
 
 
 

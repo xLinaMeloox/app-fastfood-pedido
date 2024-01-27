@@ -1,6 +1,6 @@
 package br.com.appfastfood.configuracoes;
 
-import br.com.appfastfoodpagamentos.AppFastfoodApplicationTests;
+import br.com.appfastfood.AppFastfoodApplicationTests;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 

@@ -1,8 +1,21 @@
+package br.com.appfastfood.stepdefinitions;
+
+import br.com.appfastfood.AppFastfoodApplication;
+import br.com.appfastfood.usecase.CarrinhoService;
+import br.com.appfastfood.usecase.PagamentoService;
+import br.com.appfastfood.usecase.PedidoService;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Quando;
 import io.cucumber.java.pt.Então;
-import static org.junit.Assert.*;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes= AppFastfoodApplication.class)
+@CucumberContextConfiguration
 public class PedidoStepDefinitions {
 
     CarrinhoService carrinhoService = new CarrinhoService();
@@ -12,7 +25,7 @@ public class PedidoStepDefinitions {
 
     @Dado("que a api de carrinho retornou um carrinho fechado")
     public void apiCarrinhoRetornouCarrinhoFechado() {
-        carrinhoService.simularCarrinhoFechado();
+        assertTrue(carrinhoService.isCarrinhoFechado());
     }
 
     @Então("o pedido será criado")
@@ -29,7 +42,7 @@ public class PedidoStepDefinitions {
 
     @Então("status de pagamento do pedido será atualizado para aprovado")
     public void atualizarStatusPagamentoAprovado() {
-        resposta = pedidoService.atualizarStatusPagamento(pagamentoService.obterStatus());
+        resposta = pedidoService.atualizarStatusPagamento(pagamentoService.simularStatusAprovado());
         assertEquals("Aprovado", resposta);
     }
 
@@ -40,13 +53,13 @@ public class PedidoStepDefinitions {
 
     @Então("status de pagamento do pedido será atualizado para reprovado")
     public void atualizarStatusPagamentoReprovado() {
-        resposta = pedidoService.atualizarStatusPagamento(pagamentoService.obterStatus());
+        resposta = pedidoService.atualizarStatusPagamento(pagamentoService.simularStatusReprovado());
         assertEquals("Reprovado", resposta);
     }
 
     @Dado("que status de pagamento esteja aprovado")
     public void statusPagamentoAprovadoParaPedido() {
-        resposta = pedidoService.atualizarStatusPagamento("Aprovado");
+        resposta = pedidoService.atualizarStatusPagamento(Boolean.TRUE);
         assertEquals("Em Produção", resposta);
     }
 
@@ -58,7 +71,7 @@ public class PedidoStepDefinitions {
 
     @Quando("o status do pagamento for reprovado")
     public void statusPagamentoReprovadoParaPedido() {
-        resposta = pedidoService.atualizarStatusPagamento("Reprovado");
+        resposta = pedidoService.atualizarStatusPagamento(Boolean.FALSE);
         assertEquals("Cancelado", resposta);
     }
 

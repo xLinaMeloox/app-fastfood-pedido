@@ -123,7 +123,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         StatusPagamentoEnum statusPgto = null;
 
         if(pagamentoRetorno.status().toUpperCase().equals("APROVADO")){
-            statusPgto = StatusPagamentoEnum.RECUSADO;
+            statusPgto = StatusPagamentoEnum.APROVADO;
         }else{
             statusPgto = StatusPagamentoEnum.RECUSADO;
         }
