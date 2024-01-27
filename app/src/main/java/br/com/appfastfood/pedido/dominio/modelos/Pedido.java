@@ -76,4 +76,7 @@ public class Pedido {
         return statusPagamento;
     }
 
+    public void setStatusPagamento(StatusPagamentoEnum statusPagamento) {
+        this.statusPagamento = statusPagamento;
+    }
 }

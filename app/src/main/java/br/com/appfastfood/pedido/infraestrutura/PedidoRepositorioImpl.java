@@ -1,5 +1,8 @@
 package br.com.appfastfood.pedido.infraestrutura;
 
+import br.com.appfastfood.configuracoes.client.pagamento.PagamentoClient;
+import br.com.appfastfood.configuracoes.client.pagamento.PagamentoRequisicao;
+import br.com.appfastfood.configuracoes.client.pagamento.Pagamentos;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
 import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
@@ -22,10 +25,12 @@ import java.util.stream.Collectors;
 public class PedidoRepositorioImpl implements PedidoRepositorio {
     @Autowired
     private MongoTemplate mongoTemplate;
+    private PagamentoClient pagamentoClient;
     private final SpringDataPedidoRepository springDataPedidoRepository;
 
-    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository) {
+    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient) {
         this.springDataPedidoRepository = springDataPedidoRepository;
+        this.pagamentoClient = pagamentoClient;
     }
 
     @Override
@@ -37,12 +42,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         PedidoEntidade pedidoDb = new PedidoEntidade(1L, produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
                 StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
-
-        if (realizarPagamento()) {
-            springDataPedidoRepository.save(pedidoDb);
-        } else {
-            throw new BadRequestException(ExceptionsMessages.PAGAMENTO_NAO_FOI_APROVADO.getValue());
-        }
+           springDataPedidoRepository.save(pedidoDb);
         return pedidoDb.getId().toString();
     }
 
@@ -104,20 +104,36 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     }
 
     @Override
-    public Boolean realizarPagamento() {
-        return true;
-    }
+    public StatusPagamentoEnum realizarPagamento(Long id){
+        Optional<PedidoEntidade> pedidoEntidadeBusca = this.springDataPedidoRepository.findById(id);
+        if (!pedidoEntidadeBusca.isPresent()) {
+            throw new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue());
+        }
+        List<ProdutoVO> produtosVO = pedidoEntidadeBusca.get().getProdutos().stream()
+                .map(prodEnt -> new ProdutoVO(prodEnt.getIdProduto(), prodEnt.getQuantidadeProduto()))
+                .collect(Collectors.toList());
 
-    @Override
-    public Pedido atualizaPagamento(Pedido pedido) {
-        List<ProdEnt> produtosEntidade = new ArrayList<>();
-        pedido.getProdutos().forEach(produto -> {
-            produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
-        });
-        PedidoEntidade pedidoDb = new PedidoEntidade(pedido.getId(), produtosEntidade, pedido.getCliente(),
-                pedido.getValorTotal(), StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
-                StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
-        this.springDataPedidoRepository.save(pedidoDb);
-        return pedido;
+        PagamentoRequisicao requisicao = PagamentoRequisicao.builder()
+                .meioPagamento("Cartao")
+                .idMeioPagamento("1234567891011121")
+                .valor(pedidoEntidadeBusca.get().getValorTotal())
+                .build();
+
+        Pagamentos pagamentoRetorno = this.pagamentoClient.fazerPagamento(requisicao);
+        StatusPagamentoEnum statusPgto = null;
+
+        if(pagamentoRetorno.status().toUpperCase().equals("APROVADO")){
+            statusPgto = StatusPagamentoEnum.RECUSADO;
+        }else{
+            statusPgto = StatusPagamentoEnum.RECUSADO;
+        }
+
+        Pedido pedidoRetorno = new Pedido(pedidoEntidadeBusca.get().getId(), produtosVO,
+                pedidoEntidadeBusca.get().getClienteId(),
+                pedidoEntidadeBusca.get().getValorTotal(),
+                StatusPedidoEnum.buscaEnumPorStatusString(pedidoEntidadeBusca.get().getStatus()),
+                pedidoEntidadeBusca.get().getTempoEspera(),
+                statusPgto);
+        return statusPgto;
     }
 }
