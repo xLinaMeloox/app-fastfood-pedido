@@ -2,7 +2,6 @@ package br.com.appfastfood.configuracoes;
 
 import br.com.appfastfood.AppFastfoodApplication;
 import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
-import br.com.appfastfood.configuracoes.client.pagamento.PagamentoClient;
 import br.com.appfastfood.configuracoes.logs.Log;
 import br.com.appfastfood.configuracoes.logs.Log4jLog;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;

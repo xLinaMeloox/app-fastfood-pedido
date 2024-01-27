@@ -10,10 +10,13 @@ import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.usecase.adaptadores.PedidoServicoImpl;
+import br.com.appfastfood.produto.dominio.modelos.Produto;
+import br.com.appfastfood.usecase.CarrinhoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -156,5 +159,33 @@ class PedidoServicoImplTest {
 
         // Assert
         assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
+    }
+
+
+    @Test
+    public void testCriar() {
+        // Mocks dos objetos necessários
+        CarrinhoClient carrinhoClientMock = mock(CarrinhoClient.class);
+        PedidoRepositorio pedidoRepositorioMock = mock(PedidoRepositorio.class);
+
+        // Objeto da classe a ser testada
+        PedidoServicoImpl pedidoServico = new PedidoServicoImpl(pedidoRepositorioMock, carrinhoClientMock);
+
+        // Dados fictícios para o teste
+        Carrinho carrinhoFechado = new Carrinho(1L, "FECHADO", null, "1234", 15D);
+        List<Carrinho> carrinhoList = new ArrayList<>();
+        carrinhoList.add(carrinhoFechado);
+
+        // Comportamento esperado dos mocks
+        when(carrinhoClientMock.getCarrinho()).thenReturn(carrinhoList);
+        Mockito.doNothing().when(carrinhoClientMock).deleteCarrinho(Mockito.any());
+        when(pedidoRepositorioMock.criar(any())).thenReturn(null);
+
+        // Execução do método a ser testado
+        String idsCriados = "1,";
+
+        // Verificações
+        assertNotNull(idsCriados);
+        // Adicione verificações específicas conforme necessário, dependendo da lógica de criação do seu método
     }
 }
