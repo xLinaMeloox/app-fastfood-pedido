@@ -2,9 +2,6 @@ package br.com.appfastfood.pedido.usecase.adaptadores;
 
 import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
-import br.com.appfastfood.configuracoes.client.pagamento.PagamentoClient;
-import br.com.appfastfood.configuracoes.client.pagamento.PagamentoRequisicao;
-import br.com.appfastfood.configuracoes.client.pagamento.Pagamentos;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
 import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
@@ -14,11 +11,9 @@ import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 @Service
 public class PedidoServicoImpl implements PedidoServico {
 
