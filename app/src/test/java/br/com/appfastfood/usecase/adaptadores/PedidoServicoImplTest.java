@@ -157,4 +157,38 @@ class PedidoServicoImplTest {
         // Assert
         assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
     }
+
+
+//    @Test
+//    public void testCriar() {
+//        // Cria uma instância da sua classe
+//        SuaClasse suaClasse = new SuaClasse();
+//
+//        // Cria uma instância do carrinhoClient e do pedidoRepositorio
+//        CarrinhoClient carrinhoClientMock = Mockito.mock(CarrinhoClient.class);
+//        PedidoRepositorio pedidoRepositorioMock = Mockito.mock(PedidoRepositorio.class);
+//        suaClasse.setCarrinhoClient(carrinhoClientMock);
+//        suaClasse.setPedidoRepositorio(pedidoRepositorioMock);
+//
+//        // Configuração de dados fictícios para o teste
+//        Carrinho carrinhoFechado = new Carrinho(/* dados do carrinho fechado */);
+//        Produto produto = new Produto(/* dados do produto */);
+//        carrinhoFechado.getProdutos().add(produto);
+//        List<Carrinho> carrinhoList = new ArrayList<>();
+//        carrinhoList.add(carrinhoFechado);
+//
+//        // Configuração do comportamento esperado do carrinhoClientMock
+//        Mockito.when(carrinhoClientMock.getCarrinho()).thenReturn(carrinhoList);
+//        Mockito.when(carrinhoClientMock.deleteCarrinho(Mockito.any())).thenReturn(/* algo simulado */);
+//
+//        // Configuração do comportamento esperado do pedidoRepositorioMock
+//        Mockito.when(pedidoRepositorioMock.criar(Mockito.any())).thenReturn(/* algo simulado */);
+//
+//        // Chama o método que você deseja testar
+//        String idsCriados = suaClasse.criar();
+//
+//        // Verificações
+//        assertNotNull(idsCriados);
+//        // Adicione verificações específicas conforme necessário, dependendo da lógica de criação do seu método
+//    }
 }

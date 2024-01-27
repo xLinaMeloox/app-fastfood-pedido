@@ -87,4 +87,17 @@ class PedidoTest {
         assertEquals(StatusPagamentoEnum.PENDENTE, pedidoAtualizado.getStatusPagamento());
     }
 
+//    @Test
+//    public void testSetStatusPagamento() {
+//        // Cria uma instância da sua classe
+//        SuaClasse suaClasse = new SuaClasse();
+//
+//        // Define um status de pagamento
+//        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.PAGO;
+//        suaClasse.setStatusPagamento(statusPagamento);
+//
+//        // Testa se o status de pagamento foi definido corretamente
+//        assertEquals(statusPagamento, suaClasse.getStatusPagamento());
+//    }
+
 }
