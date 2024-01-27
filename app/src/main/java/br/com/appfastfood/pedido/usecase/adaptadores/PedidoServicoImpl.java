@@ -1,8 +1,11 @@
 package br.com.appfastfood.pedido.usecase.adaptadores;
 
 import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
+import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
+import br.com.appfastfood.configuracoes.client.pagamento.PagamentoClient;
+import br.com.appfastfood.configuracoes.client.pagamento.PagamentoRequisicao;
+import br.com.appfastfood.configuracoes.client.pagamento.Pagamentos;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
-import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
 import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
@@ -10,47 +13,43 @@ import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class PedidoServicoImpl implements PedidoServico {
 
     private final PedidoRepositorio pedidoRepositorio;
-    private RestTemplate restTemplate;
+    //private RestTemplate restTemplate;
+    private final CarrinhoClient carrinhoClient;
+    private final PagamentoClient pagamentoClient;
 
-    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio) {
-
+    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, CarrinhoClient carrinhoClient, PagamentoClient pagamentoClient) {
         this.pedidoRepositorio = pedidoRepositorio;
-    }
-    public PedidoServicoImpl(PedidoRepositorio pedidoRepositorio, RestTemplate restTemplate) {
-        this.pedidoRepositorio = pedidoRepositorio;
-        this.restTemplate = restTemplate;
+        this.carrinhoClient = carrinhoClient;
+        this.pagamentoClient = pagamentoClient;
     }
 
     @Override
-    public String criar(PedidoRequisicao pedidoReq, String status, String tempo) {
-        return null;
-    }
-    public String criar(List<Carrinho> carrinho) {
+    public String criar() {
+        List<Carrinho> carrinho = this.carrinhoClient.getCarrinho();
         String idsCriados = "";
-
         Pedido pedido = new Pedido(null,null,null,null,null,null,null);
         for (Carrinho listaCarrinho : carrinho) {
-        List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
-            ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
-            produtosVO.add(produtoVO);
-            pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
-                    StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "1", StatusPagamentoEnum.PENDENTE);
-
-            idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
+            if(listaCarrinho.status().toUpperCase().equals("FECHADO")){
+                List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
+                ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
+                produtosVO.add(produtoVO);
+                pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
+                    StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "35:00",StatusPagamentoEnum.PENDENTE);
+                this.carrinhoClient.deleteCarrinho(listaCarrinho.id());
+                idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
+            }
         }
-
-
-    return idsCriados;
-        
+        return idsCriados;
     }
 
     @Override
@@ -80,7 +79,8 @@ public class PedidoServicoImpl implements PedidoServico {
 
     @Override
     public Pedido buscarPedidoPorId(Long id) {
-        return null;
+        Pedido pedido = this.pedidoRepositorio.buscarPedidoPorId(id);
+        return pedido;
     }
 
     @Override
@@ -101,12 +101,9 @@ public class PedidoServicoImpl implements PedidoServico {
         return listaTotal;
     }
 
+    @Override
     public StatusPagamentoEnum atualizarPagamento(Long id) {
-        return StatusPagamentoEnum.APROVADO;
-    }
-
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+        return this.pedidoRepositorio.realizarPagamento(id);
     }
 
 }

@@ -1,6 +1,7 @@
 package br.com.appfastfood.pedido.dominio.repositorios;
 
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
+import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
 
 import java.util.List;
 
@@ -9,6 +10,5 @@ public interface PedidoRepositorio {
     Pedido atualizar(Pedido pedido) ;
     List<Pedido> listarTodosOsPedidos();
     Pedido buscarPedidoPorId(Long id);
-    Boolean realizarPagamento();
-    Pedido atualizaPagamento(Pedido pedido);
+    StatusPagamentoEnum realizarPagamento(Long id);
 } 
