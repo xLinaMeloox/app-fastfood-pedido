@@ -23,14 +23,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class PedidoRepositorioImpl implements PedidoRepositorio {
-    @Autowired
-    private MongoTemplate mongoTemplate;
-    private PagamentoClient pagamentoClient;
+
+    private final MongoTemplate mongoTemplate;
+    private final PagamentoClient pagamentoClient;
     private final SpringDataPedidoRepository springDataPedidoRepository;
 
-    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient) {
+    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate ) {
         this.springDataPedidoRepository = springDataPedidoRepository;
         this.pagamentoClient = pagamentoClient;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     }
 
     @Override
-    public Pedido atualizar(Pedido pedido) {
+    public Pedido atualizar(Pedido pedido){
         List<ProdEnt> produtosEntidade = new ArrayList<>();
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
