@@ -29,7 +29,7 @@ public class PedidoServicoImpl implements PedidoServico {
     public String criar() {
         List<Carrinho> carrinho = this.carrinhoClient.getCarrinho();
         String idsCriados = "";
-        Pedido pedido = new Pedido(null,null,null,null,null,null,null);
+        Pedido pedido;
         for (Carrinho listaCarrinho : carrinho) {
             if(listaCarrinho.status().toUpperCase().equals("FECHADO")){
                 List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();

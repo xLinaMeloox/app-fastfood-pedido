@@ -34,26 +34,27 @@ public class PedidoServicoImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
     }
 
-//    @Test
-//    void criar_DeveCriarPedidosEExcluirCarrinho() {
-//        // Arrange
-//        List<Carrinho> carrinhoFechado = new ArrayList<>();
-//        Carrinho carrinho = new Carrinho(1L, "FECHADO", new ArrayList<>(), "123456", 100.0);
-//        carrinhoFechado.add(carrinho);
-//
-//        when(carrinhoClient.getCarrinho()).thenReturn(carrinhoFechado);
-//        when(pedidoRepositorio.criar(any())).thenReturn("1");
-//
-//        // Act
-//        String idsCriados = pedidoServico.criar();
-//
-//        // Assert
-//        assertEquals("0,", idsCriados);
-//        verify(carrinhoClient, times(1)).getCarrinho();
-//        verify(carrinhoClient, times(1)).deleteCarrinho(anyLong());
-//    }
+    @Test
+    void criar_DeveCriarPedidosEExcluirCarrinho() {
+        // Arrange
+        List<Carrinho> carrinhoFechado = new ArrayList<>();
+        Carrinho carrinho = new Carrinho(1L, "FECHADO", mockProdutos(), "123456", 100.0);
+        carrinhoFechado.add(carrinho);
+
+        when(carrinhoClient.getCarrinho()).thenReturn(carrinhoFechado);
+        when(pedidoRepositorio.criar(any())).thenReturn("1");
+
+        // Act
+        String idsCriados = pedidoServico.criar();
+
+        // Assert
+        assertEquals("1,", idsCriados);
+        verify(carrinhoClient, times(1)).getCarrinho();
+        verify(carrinhoClient, times(1)).deleteCarrinho(anyLong());
+    }
 
     @Test
     void atualizar_PedidoNaoEncontrado_DeveLancarExcecao() {
@@ -151,6 +152,18 @@ public class PedidoServicoImplTest {
 
         // Assert
         assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
+    }
+
+    private List<Carrinho.Produto> mockProdutos() {
+        // Cria uma lista de produtos
+        List<Carrinho.Produto> produtos = new ArrayList<>();
+
+        // Adiciona alguns produtos à lista
+        produtos.add(new Carrinho.Produto("Produto1", 1));
+        produtos.add(new Carrinho.Produto("Produto2", 2));
+
+        // Retorna a lista de produtos
+        return produtos;
     }
 
 }
