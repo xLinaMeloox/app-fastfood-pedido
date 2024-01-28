@@ -26,7 +26,7 @@ public class HandlerException extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> internalServerErrorException(InternalServerErrorException e) {
         RequisicaoExcecao jsonExcecao = new RequisicaoExcecao(e.getMessage(), HttpStatus.BAD_REQUEST.value());
         logger.aviso(jsonExcecao.toString());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonExcecao);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonExcecao);
     }
 
 }
