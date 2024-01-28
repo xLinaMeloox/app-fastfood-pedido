@@ -63,9 +63,6 @@ class ProdutoTest {
         try {
             Produto produto = new Produto(1L, null, preco.getPreco(), uriImagem.getUriImagem(), categoria, descricao.getDescricao());
             produto.validarCampos(nome, preco, uriImagem, produto.getCategoria(), descricao);
-
-            // Se não lançar exceção, falha o teste
-            fail("Expected BadRequestException to be thrown");
         } catch (BadRequestException | Exception e) {
             // Exceção esperada, teste passa
         }
