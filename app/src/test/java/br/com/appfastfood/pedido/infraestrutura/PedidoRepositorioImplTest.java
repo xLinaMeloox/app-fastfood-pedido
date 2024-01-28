@@ -200,6 +200,22 @@ class PedidoRepositorioImplTest {
         });
     }
 
+    @Test
+    void listarTodosOsPedidos_QuandoHaverPedidos_DeveRetornarListaDePedidos() {
+        // Arrange
+        List<PedidoEntidade> pedidoEntidades = new ArrayList<>();
+        pedidoEntidades.add(mockPedidoEntidade());
+        when(springDataPedidoRepository.findNotInFinalzado()).thenReturn(pedidoEntidades);
+
+        // Act
+        List<Pedido> pedidos = pedidoRepositorio.listarTodosOsPedidos();
+
+        // Assert
+        assertNotNull(pedidos);
+        assertFalse(pedidos.isEmpty());
+        assertEquals(1, pedidos.size());
+    }
+
 
     private Pedido mockPedido() {
         List<ProdutoVO> produtos = new ArrayList<>();
@@ -209,7 +225,7 @@ class PedidoRepositorioImplTest {
 
     public static PedidoEntidade mockPedidoEntidade() {
         List<ProdEnt> produtos = new ArrayList<>();
-        return new PedidoEntidade(1L, produtos, "clienteId", 100.0, "status", "tempoEspera", "statusPagamento");
+        return new PedidoEntidade(1L, produtos, "clienteId", 100.0, "EM_PREPARACAO", "tempoEspera", "APROVADO");
     }
 
     public static Pagamentos mockPagamentos(String status) {
