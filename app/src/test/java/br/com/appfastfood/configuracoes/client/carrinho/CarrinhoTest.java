@@ -80,4 +80,37 @@ class CarrinhoTest {
 
         assertEquals(1, prods.get(0).quantidadeProduto());
     }
+
+    @Test
+    void testGetIdCliente_DeveRetornarIdClienteCorreto() {
+        // Arrange
+        String idCliente = "123456";
+        List<Carrinho.Produto> produtos = new ArrayList<>();
+        produtos.add(new Carrinho.Produto("1", 2));
+        Carrinho carrinho = new Carrinho(1L, "FECHADO", produtos, idCliente, 100.00);
+
+        // Act
+        String idClienteRetornado = carrinho.getIdCliente();
+
+        // Assert
+        assertEquals(idCliente, idClienteRetornado);
+    }
+
+    @Test
+    void testGetValorTotal_DeveRetornarValorTotalCorreto() {
+        // Arrange
+        List<Carrinho.Produto> produtos = new ArrayList<>();
+        Carrinho.Produto produto1 = new Carrinho.Produto("1", 1);
+        Carrinho.Produto produto2 = new Carrinho.Produto("2", 2);
+        produtos.add(produto1);
+        produtos.add(produto2);
+        Carrinho carrinho = new Carrinho(1L, "FECHADO", produtos, "123456", 100.00);
+
+        // Act
+        Double valorTotalRetornado = carrinho.getValorTotal();
+
+        // Assert
+        assertEquals(100.00, valorTotalRetornado);
+    }
 }
+
