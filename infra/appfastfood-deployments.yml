@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: appfastfood
-          image: caikemury/appfastfood:latest
+          image: caikemury/appshakirafastfood:latest
           ports:
             - containerPort: 8080
           envFrom:

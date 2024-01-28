@@ -4,6 +4,6 @@ metadata:
   name: appfastfood-configmap
 data:
 
-  MONGODB_HOST: "mongodb://localhost:27017"
-  MONGODB_DATABASE: "app-fastfood"
-  JAVA_TOOL_OPTIONS: ""
+  MONGODB_HOST: "fastfood-docdb2-cluster.cluster-c4bgv5fkmppp.us-east-1.docdb.amazonaws.com"
+  MONGODB_DATABASE: "appfastfood"
+  JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
