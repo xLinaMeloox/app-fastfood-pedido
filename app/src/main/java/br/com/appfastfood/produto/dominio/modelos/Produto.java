@@ -21,7 +21,7 @@ public class Produto {
         this.categoria = categoria;
         this.descricao = descricao;
     }
-    public void validarCampos(Nome nome, Preco preco, UriImagem uriImagem, CategoriaEnum categoria, Descricao descricao) {
+    public void validarCampos(Nome nome, Preco preco, UriImagem uriImagem, CategoriaEnum categoria, Descricao descricao) throws BadRequestException {
         if(Validacoes.validaCamposVaziosOuNulos(nome, preco, uriImagem, categoria, descricao)){
             throw new BadRequestException(ExceptionsMessages.CAMPOS_OBRIGATORIOS.getValue());
         }
