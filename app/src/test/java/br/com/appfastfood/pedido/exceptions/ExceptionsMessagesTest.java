@@ -2,9 +2,11 @@ package br.com.appfastfood.pedido.exceptions;
 
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class ExceptionsMessagesTest {
 
     @Test
