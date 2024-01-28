@@ -151,19 +151,14 @@ class PedidoRepositorioImplTest {
         pedidoEntidade.setId(idPedido);
         when(springDataPedidoRepository.findById(idPedido)).thenReturn(Optional.of(pedidoEntidade));
 
-        PagamentoRequisicao requisicao = PagamentoRequisicao.builder()
-                .meioPagamento("Cartao")
-                .idMeioPagamento("1234567891011121")
-                .valor(100.0) // Valor do pedido
-                .build();
         Pagamentos pagamentoRetorno = mockPagamentos("APROVADO");
-        when(pagamentoClient.fazerPagamento(requisicao)).thenReturn(pagamentoRetorno);
+        when(pagamentoClient.fazerPagamento(any())).thenReturn(pagamentoRetorno);
 
         // Act
-        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.APROVADO;
+        StatusPagamentoEnum statusPagamento = pedidoRepositorio.realizarPagamento(idPedido);
 
         // Assert
-        Assertions.assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
+        assertEquals(StatusPagamentoEnum.APROVADO, statusPagamento);
     }
 
     @Test
@@ -174,19 +169,15 @@ class PedidoRepositorioImplTest {
         pedidoEntidade.setId(idPedido);
         when(springDataPedidoRepository.findById(idPedido)).thenReturn(Optional.of(pedidoEntidade));
 
-        PagamentoRequisicao requisicao = PagamentoRequisicao.builder()
-                .meioPagamento("Cartao")
-                .idMeioPagamento("1234567891011121")
-                .valor(100.0) // Valor do pedido
-                .build();
+
         Pagamentos pagamentoRetorno = mockPagamentos("RECUSADO");
-        when(pagamentoClient.fazerPagamento(requisicao)).thenReturn(pagamentoRetorno);
+        when(pagamentoClient.fazerPagamento(any())).thenReturn(pagamentoRetorno);
 
         // Act
-        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.RECUSADO;
+        StatusPagamentoEnum statusPagamento = pedidoRepositorio.realizarPagamento(idPedido);
 
         // Assert
-        Assertions.assertEquals(StatusPagamentoEnum.RECUSADO, statusPagamento);
+        assertEquals(StatusPagamentoEnum.RECUSADO, statusPagamento);
     }
 
     @Test
@@ -215,6 +206,7 @@ class PedidoRepositorioImplTest {
         assertFalse(pedidos.isEmpty());
         assertEquals(1, pedidos.size());
     }
+
 
 
     private Pedido mockPedido() {

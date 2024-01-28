@@ -74,4 +74,7 @@ public class PedidoEntidade {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void setProdutos(List<ProdEnt> produtos) {
+    }
 }
