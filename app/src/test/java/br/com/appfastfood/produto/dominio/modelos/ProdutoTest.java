@@ -51,15 +51,24 @@ class ProdutoTest {
     }
 
     @Test
-    void validarCampos_QuandoCamposSaoNulos_DeveLancarExcecao() {
+    void construtor_QuandoNomeEhNulo_DeveLancarExcecao() {
         // Arrange
-        Produto produto = new Produto(null, null, null, null, null, null);
-        Nome nome = new Nome("Hamburguer");
-        Preco preco = new Preco(10.0);
-        UriImagem uriImagem = new UriImagem("http://teste.com");
+        Nome nome = null; // Nome nulo
+        Preco preco = new Preco(15.0);
+        UriImagem uriImagem = new UriImagem("https://example.com/image.jpg");
         CategoriaEnum categoria = CategoriaEnum.lanche;
-        Descricao descricao = new Descricao("Delicioso hamburguer");
+        Descricao descricao = new Descricao("Delicioso hambúrguer caseiro");
+
         // Act & Assert
-        assertDoesNotThrow(() -> produto.validarCampos(nome, preco, uriImagem, categoria, descricao));
+        try {
+            Produto produto = new Produto(1L, null, preco.getPreco(), uriImagem.getUriImagem(), categoria, descricao.getDescricao());
+            produto.validarCampos(nome, preco, uriImagem, produto.getCategoria(), descricao);
+
+            // Se não lançar exceção, falha o teste
+            fail("Expected BadRequestException to be thrown");
+        } catch (BadRequestException | Exception e) {
+            // Exceção esperada, teste passa
+        }
     }
+
 }
