@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "appfastfood-producao")
+@FeignClient(url = "172.20.136.67:8080/", name = "Carrinho")
 public interface CarrinhoClient {
 
-    @GetMapping("/carrinho")
+    @GetMapping("carrinho")
     List<Carrinho> getCarrinho();
 
-    @DeleteMapping("/carrinho/{id}")
+    @DeleteMapping("carrinho/{id}")
     void deleteCarrinho(@RequestParam Long id);
 }
