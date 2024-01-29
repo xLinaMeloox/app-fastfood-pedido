@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(url = "http://a4c676d7482b8444089c07fcdcf0f598-957dcc16b9d9f355.elb.us-east-1.amazonaws.com:8080/", name = "Carrinho")
+@FeignClient(url = "http://a63ca3d0b51b849349ddff3fbc1f438a-f36c87df02ec6970.elb.us-east-1.amazonaws.com/", name = "Carrinho")
 public interface CarrinhoClient {
 
     @GetMapping("carrinho")
