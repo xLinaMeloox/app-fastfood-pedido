@@ -10,7 +10,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringBootApplication
-@EnableDiscoveryClient
 @OpenAPIDefinition(info = @Info(
 		title = "API - Fast Food",
 		version = "0.0.3-SNAPSHOT",

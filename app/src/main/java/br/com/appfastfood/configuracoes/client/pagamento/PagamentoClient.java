@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "appfastfood-pagamentos")
+@FeignClient(url = "172.20.252.210:8080/", name = "pagamentos")
 public interface PagamentoClient {
-    @PostMapping("/pagamentos")
+    @PostMapping("pagamentos")
     Pagamentos fazerPagamento(@RequestBody PagamentoRequisicao pagamentoRequisicao);
 }
