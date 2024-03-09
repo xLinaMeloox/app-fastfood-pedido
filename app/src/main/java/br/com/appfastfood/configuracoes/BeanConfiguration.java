@@ -8,6 +8,7 @@ import br.com.appfastfood.configuracoes.logs.Log4jLog;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.infraestrutura.PedidoRepositorioImpl;
 import br.com.appfastfood.pedido.infraestrutura.SpringDataPedidoRepository;
+import br.com.appfastfood.pedido.usecase.adaptadores.IPedidoQueueAdapterOUT;
 import br.com.appfastfood.pedido.usecase.adaptadores.PedidoServicoImpl;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,8 +28,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    PedidoRepositorio pedidoRepositorio(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate){
-        return new PedidoRepositorioImpl(springDataPedidoRepository,pagamentoClient, mongoTemplate);
+    PedidoRepositorio pedidoRepositorio(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate,IPedidoQueueAdapterOUT pedidoQueueAdapterOUT ){
+        return new PedidoRepositorioImpl(springDataPedidoRepository,pagamentoClient, mongoTemplate,pedidoQueueAdapterOUT);
     }
 
     @Bean
