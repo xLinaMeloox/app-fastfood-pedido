@@ -12,8 +12,7 @@ import br.com.appfastfood.pedido.usecase.adaptadores.IPedidoQueueAdapterOUT;
 
 @Service
 public class PedidoQueueAdapterOUT implements IPedidoQueueAdapterOUT {
-   // private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+   
     @Autowired
     private RabbitTemplate rabbitTemplate;
 

@@ -11,7 +11,6 @@ import br.com.appfastfood.pedido.infraestrutura.SpringDataPedidoRepository;
 import br.com.appfastfood.pedido.usecase.adaptadores.IPedidoQueueAdapterOUT;
 import br.com.appfastfood.pedido.usecase.adaptadores.PedidoServicoImpl;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
