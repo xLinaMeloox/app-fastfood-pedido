@@ -1,5 +1,8 @@
-package br.com.appfastfood.configuracoes.execption;
+package br.com.appfastfood.configuracoes.exception;
 
+import br.com.appfastfood.configuracoes.execption.BadRequestException;
+import br.com.appfastfood.configuracoes.execption.HandlerException;
+import br.com.appfastfood.configuracoes.execption.InternalServerErrorException;
 import br.com.appfastfood.configuracoes.logs.Log;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.RequisicaoExcecao;
 import org.junit.jupiter.api.BeforeEach;

@@ -48,7 +48,7 @@ public class PedidoServicoImplTest {
         when(pedidoRepositorio.criar(any())).thenReturn("1");
 
         // Act
-        String idsCriados = pedidoServico.criar();
+        String idsCriados = pedidoServico.criar(1L);
 
         // Assert
         assertEquals("1,", idsCriados);
@@ -64,7 +64,7 @@ public class PedidoServicoImplTest {
 
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
-            pedidoServico.atualizar(idPedido);
+            pedidoServico.atualizar(idPedido, false);
         });
     }
 
@@ -77,7 +77,7 @@ public class PedidoServicoImplTest {
 
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
-            pedidoServico.atualizar(idPedido);
+            pedidoServico.atualizar(idPedido, false);
         });
     }
 
@@ -90,7 +90,7 @@ public class PedidoServicoImplTest {
 
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
-            pedidoServico.atualizar(idPedido);
+            pedidoServico.atualizar(idPedido, false);
         });
     }
 
@@ -103,7 +103,7 @@ public class PedidoServicoImplTest {
         when(pedidoRepositorio.atualizar(any())).thenReturn(pedido);
 
         // Act
-        Pedido pedidoAtualizado = pedidoServico.atualizar(idPedido);
+        Pedido pedidoAtualizado = pedidoServico.atualizar(idPedido, false);
 
         // Assert
         assertNotNull(pedidoAtualizado);

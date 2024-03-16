@@ -36,7 +36,7 @@ class PedidoControllerTest {
         String idMock = "123";
 
         // Mock do retorno do serviço de criação de pedido
-        when(pedidoServico.criar()).thenReturn(idMock);
+        when(pedidoServico.criar(1L)).thenReturn(idMock);
 
         // Chamada ao método do controlador
         ResponseEntity<PedidoRequisicao> responseEntity = pedidoController.criar();
@@ -53,7 +53,7 @@ class PedidoControllerTest {
         // Configurar o pedidoMock conforme necessário
 
         // Mock do retorno do serviço de atualização de status
-        when(pedidoServico.atualizar(1L)).thenReturn(pedidoMock);
+        when(pedidoServico.atualizar(1L, false)).thenReturn(pedidoMock);
 
         // Chamada ao método do controlador
         ResponseEntity<Pedido> responseEntity = pedidoController.atualizarStatus(1L);

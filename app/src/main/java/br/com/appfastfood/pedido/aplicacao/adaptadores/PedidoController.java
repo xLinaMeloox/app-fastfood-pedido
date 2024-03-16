@@ -41,7 +41,7 @@ public class PedidoController {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
         public ResponseEntity<PedidoRequisicao> criar() {
-                String id = this.pedidoServico.criar();
+                String id = this.pedidoServico.criar(null);
                                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(PedidoRequisicao.builder().idPedido(id).build());
         }
@@ -54,7 +54,7 @@ public class PedidoController {
                         @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
         public ResponseEntity<Pedido> atualizarStatus(@PathVariable("id") Long id) {
 
-                Pedido pedidoRetorno = this.pedidoServico.atualizar(id);
+                Pedido pedidoRetorno = this.pedidoServico.atualizar(id, false);
                 return ResponseEntity.status(HttpStatus.OK).body(pedidoRetorno);
         }
 
