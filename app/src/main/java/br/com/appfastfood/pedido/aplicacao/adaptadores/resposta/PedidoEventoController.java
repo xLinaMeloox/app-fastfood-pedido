@@ -1,3 +1,5 @@
+package br.com.appfastfood.pedido.aplicacao.adaptadores.resposta;
+
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.MensagemSNS;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import com.fasterxml.jackson.core.JsonProcessingException;
