@@ -67,6 +67,9 @@ public class Pedido {
     public StatusPedidoEnum getStatus() {
         return status;
     }
+    public void setStatus(StatusPedidoEnum statusPedidoEnum) {
+       this.status = statusPedidoEnum;
+    }
 
     public String getTempoEspera() {
         return tempoEspera;

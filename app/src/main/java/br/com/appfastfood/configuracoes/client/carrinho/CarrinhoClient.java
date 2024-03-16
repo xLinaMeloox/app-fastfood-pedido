@@ -13,6 +13,9 @@ public interface CarrinhoClient {
     @GetMapping("carrinho")
     List<Carrinho> getCarrinho();
 
+    @GetMapping("carrinho/{id}")
+    Carrinho getCarrinhoPorId(@RequestParam Long id);
+
     @DeleteMapping("carrinho/{id}")
     void deleteCarrinho(@RequestParam Long id);
 }

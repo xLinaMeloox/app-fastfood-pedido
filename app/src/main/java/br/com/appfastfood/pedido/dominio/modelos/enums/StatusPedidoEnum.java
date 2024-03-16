@@ -7,7 +7,8 @@ public enum StatusPedidoEnum {
     RECEBIDO(1, "RECEBIDO"),
     EM_PREPARACAO(2, "EM_PREPARACAO"),
     PRONTO(3, "PRONTO"),
-    FINALIZADO(4, "FINALIZADO");
+    FINALIZADO(4, "FINALIZADO"),
+    CANCELADO(5, "CANCELADO");
 
     private final int id;
     private final String nome;

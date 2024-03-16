@@ -26,26 +26,26 @@ public class PedidoServicoImpl implements PedidoServico {
     }
 
     @Override
-    public String criar() {
-        List<Carrinho> carrinho = this.carrinhoClient.getCarrinho();
-        String idsCriados = "";
-        Pedido pedido;
-        for (Carrinho listaCarrinho : carrinho) {
-            if(listaCarrinho.status().toUpperCase().equals("FECHADO")){
+    public String criar(Long id) {
+       Carrinho carrinho = this.carrinhoClient.getCarrinhoPorId(id);
+         Pedido pedido;
+       
+            if(carrinho.status().toUpperCase().equals("FECHADO")){
                 List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
-                ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
+                ProdutoVO produtoVO = new ProdutoVO(carrinho.getProdutos().get(0).idProduto().toString(), carrinho.getProdutos().get(0).quantidadeProduto().toString());
                 produtosVO.add(produtoVO);
-                pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
+                pedido = new Pedido(produtosVO, carrinho.getIdCliente(), carrinho.getValorTotal(),
                     StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "35:00",StatusPagamentoEnum.PENDENTE);
-                this.carrinhoClient.deleteCarrinho(listaCarrinho.id());
-                idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
+              //  this.carrinhoClient.deleteCarrinho(carrinho.id());
+                this.pedidoRepositorio.criar(pedido);
+
             }
-        }
-        return idsCriados;
+     
+        return carrinho.id().toString();
     }
 
     @Override
-    public Pedido atualizar(Long id) {
+    public Pedido atualizar(Long id, boolean isCancelarPedido) {
         Pedido pedidoBusca = this.pedidoRepositorio.buscarPedidoPorId(id);
         Pedido pedido = null;
 
@@ -72,7 +72,11 @@ public class PedidoServicoImpl implements PedidoServico {
             pedido = pedidoBusca;
         }
 
-        return this.pedidoRepositorio.atualizar(pedido.atualizaStatus());
+        if (isCancelarPedido) {
+            pedido.setStatus(StatusPedidoEnum.CANCELADO);
+        }
+
+        return this.pedidoRepositorio.atualizar(isCancelarPedido == true ? pedido : pedido.atualizaStatus());
     }
 
     @Override

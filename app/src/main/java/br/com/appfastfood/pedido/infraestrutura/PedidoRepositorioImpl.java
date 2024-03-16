@@ -12,7 +12,7 @@ import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.infraestrutura.entidades.PedidoEntidade;
 import br.com.appfastfood.pedido.infraestrutura.entidades.ProdEnt;
-import br.com.appfastfood.pedido.usecase.adaptadores.IPedidoQueueAdapterOUT;
+import br.com.appfastfood.pedido.usecase.portas.TopicHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,9 +29,9 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     private final MongoTemplate mongoTemplate;
     private final PagamentoClient pagamentoClient;
     private final SpringDataPedidoRepository springDataPedidoRepository;
-    private final IPedidoQueueAdapterOUT pedidoQueueAdapterOUT;   
+    private final TopicHandler pedidoQueueAdapterOUT;   
 
-    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate ,IPedidoQueueAdapterOUT pedidoQueueAdapterOUT ) {
+    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate ,TopicHandler pedidoQueueAdapterOUT ) {
         this.springDataPedidoRepository = springDataPedidoRepository;
         this.pagamentoClient = pagamentoClient;
         this.mongoTemplate = mongoTemplate;
@@ -48,7 +48,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
                 StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
            springDataPedidoRepository.save(pedidoDb);
-           pedidoQueueAdapterOUT.publish("pedidoEnviadoParaFila");
+           pedidoQueueAdapterOUT.publish(pedidoDb.getId().toString(),"pedido-criado");
 
         return pedidoDb.getId().toString();
     }
@@ -63,6 +63,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
                 pedido.getValorTotal(), StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
         this.springDataPedidoRepository.save(pedidoDb);
+        pedidoQueueAdapterOUT.publish(pedidoDb.getId().toString(),"pedido-preparado");
         return pedido;
     }
 

@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface PedidoServico {
 
-    String criar();
-    Pedido atualizar(Long id);
+    String criar(Long id);
+    Pedido atualizar(Long id, boolean isCancelarPedido);
     Pedido buscarPedidoPorId(Long id);
     List<Pedido> listarTodosPedidos();
     StatusPagamentoEnum atualizarPagamento(Long id);
