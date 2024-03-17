@@ -1,6 +1,9 @@
 package br.com.appfastfood.pedido.usecase.adaptadores.producers;
+import org.springframework.stereotype.Component;
+
 import br.com.appfastfood.pedido.usecase.portas.TopicHandler;
 
+@Component
 public class PedidoQueueAdapterOUT {
     private TopicHandler snsTopic;
     public PedidoQueueAdapterOUT(TopicHandler snstopicHandler) {

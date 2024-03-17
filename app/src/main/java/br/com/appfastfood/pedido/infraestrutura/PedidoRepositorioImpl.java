@@ -13,6 +13,7 @@ import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.infraestrutura.entidades.PedidoEntidade;
 import br.com.appfastfood.pedido.infraestrutura.entidades.ProdEnt;
 import br.com.appfastfood.pedido.usecase.adaptadores.producers.PedidoQueueAdapterOUT;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
