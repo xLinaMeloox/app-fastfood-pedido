@@ -37,10 +37,6 @@ public enum StatusPedidoEnum {
 
     public static StatusPedidoEnum statusSeguinte (StatusPedidoEnum statusPedidoEnum) {
         if (statusPedidoEnum == StatusPedidoEnum.RECEBIDO) {
-            return StatusPedidoEnum.EM_PREPARACAO;
-        }
-
-        if (statusPedidoEnum == StatusPedidoEnum.EM_PREPARACAO) {
             return StatusPedidoEnum.PRONTO;
         }
 

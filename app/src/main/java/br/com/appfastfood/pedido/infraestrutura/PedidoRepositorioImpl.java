@@ -42,11 +42,11 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
         });
-        PedidoEntidade pedidoDb = new PedidoEntidade(1L, produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
+        PedidoEntidade pedidoDb = new PedidoEntidade(pedido.getId(), produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
                 StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
            springDataPedidoRepository.save(pedidoDb);
-           pedidoQueueAdapterOUT.criar(pedidoDb.getId());
+           pedidoQueueAdapterOUT.criar(pedido);
 
         return pedidoDb.getId().toString();
     }
@@ -62,12 +62,12 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
         this.springDataPedidoRepository.save(pedidoDb);
         
-        if(pedido.getStatus().getNome().equals(StatusPedidoEnum.EM_PREPARACAO.getNome())){
-            //Como que fica o em preparação?
-        }else if(pedido.getStatus().getNome().equals(StatusPedidoEnum.PRONTO.getNome())){
-            pedidoQueueAdapterOUT.pedidoPreparado(pedidoDb.getId());
+        if(pedido.getStatus().getNome().equals(StatusPedidoEnum.PRONTO.getNome())){
+            pedidoQueueAdapterOUT.pedidoPreparado(pedido);
         }else if(pedido.getStatus().getNome().equals(StatusPedidoEnum.FINALIZADO.getNome())){
-            pedidoQueueAdapterOUT.pedidoFinalizado(pedidoDb.getId());
+            pedidoQueueAdapterOUT.pedidoFinalizado(pedido);
+        }else if(pedido.getStatus().getNome().equals(StatusPedidoEnum.CANCELADO.getNome())){
+            pedidoQueueAdapterOUT.cancelaPedido(pedido);
         }
         return pedido;
     }

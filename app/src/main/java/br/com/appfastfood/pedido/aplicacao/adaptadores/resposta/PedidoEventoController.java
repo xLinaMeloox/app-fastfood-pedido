@@ -1,5 +1,6 @@
 package br.com.appfastfood.pedido.aplicacao.adaptadores.resposta;
 
+import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.MensagemSNS;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -64,7 +65,7 @@ public class PedidoEventoController {
                 case "Notification":
                     // Lógica para tratar mensagens recebidas
                     System.out.println("Received message: " + snsMessage.getMessage());
-                    pedidoServico.criar(Long.parseLong(snsMessage.getMessage()));
+                    pedidoServico.criar(snsMessage.getMessage());
 
                     break;
                 case "UnsubscribeConfirmation":
@@ -117,7 +118,7 @@ public class PedidoEventoController {
             case "Notification":
                 // Lógica para tratar mensagens recebidas
                 System.out.println("Received message: " + snsMessage.getMessage());
-                pedidoServico.atualizar(Long.parseLong(snsMessage.getMessage()),false);
+                pedidoServico.atualizar(snsMessage.getMessage(),false);
                 break;
             case "UnsubscribeConfirmation":
                 // Lógica para tratar confirmações de cancelamento de inscrição
@@ -168,7 +169,7 @@ public class PedidoEventoController {
             case "Notification":
                 // Lógica para tratar mensagens recebidas
                 System.out.println("Received message: " + snsMessage.getMessage());
-                pedidoServico.atualizar(Long.parseLong(snsMessage.getMessage()),false);
+                pedidoServico.atualizar(snsMessage.getMessage(),false);
 
                 break;
             case "UnsubscribeConfirmation":
@@ -220,7 +221,7 @@ public class PedidoEventoController {
             case "Notification":
                 // Lógica para tratar mensagens recebidas
                 System.out.println("Received message: " + snsMessage.getMessage());
-                pedidoServico.atualizar(Long.parseLong(snsMessage.getMessage()),true);
+                pedidoServico.atualizar(snsMessage.getMessage(),true);
 
                 break;
             case "UnsubscribeConfirmation":
