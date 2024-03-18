@@ -1,10 +1,8 @@
-package br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao;
+package br.com.appfastfood.pedido.usecase.adaptadores.producers.out;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,7 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProdutosReq implements Serializable {
+public class ProdutosRequisicaoOut {
 
     @JsonProperty("id_produto")
     private String idProduto;
@@ -31,7 +29,5 @@ public class ProdutosReq implements Serializable {
 
     @JsonProperty("uriImagem")
     private String uriImagem;
-
-
 
 }
