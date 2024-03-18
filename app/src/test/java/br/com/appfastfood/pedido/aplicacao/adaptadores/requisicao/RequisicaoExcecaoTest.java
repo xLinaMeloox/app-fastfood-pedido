@@ -1,4 +1,4 @@
-import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.RequisicaoExcecao;
+package br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

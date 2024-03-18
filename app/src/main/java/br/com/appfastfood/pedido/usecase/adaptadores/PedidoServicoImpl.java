@@ -3,6 +3,8 @@ package br.com.appfastfood.pedido.usecase.adaptadores;
 import br.com.appfastfood.configuracoes.client.carrinho.Carrinho;
 import br.com.appfastfood.configuracoes.client.carrinho.CarrinhoClient;
 import br.com.appfastfood.configuracoes.execption.BadRequestException;
+import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.PedidoRequisicao;
+import br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao.ProdutosReq;
 import br.com.appfastfood.pedido.dominio.modelos.Pedido;
 import br.com.appfastfood.pedido.dominio.modelos.vo.ProdutoVO;
 import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPagamentoEnum;
@@ -10,10 +12,16 @@ import br.com.appfastfood.pedido.dominio.modelos.enums.StatusPedidoEnum;
 import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.usecase.portas.PedidoServico;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class PedidoServicoImpl implements PedidoServico {
 
@@ -26,53 +34,46 @@ public class PedidoServicoImpl implements PedidoServico {
     }
 
     @Override
-    public String criar() {
-        List<Carrinho> carrinho = this.carrinhoClient.getCarrinho();
-        String idsCriados = "";
-        Pedido pedido;
-        for (Carrinho listaCarrinho : carrinho) {
-            if(listaCarrinho.status().toUpperCase().equals("FECHADO")){
+    @Transactional
+    public void criar(String carrinho) {
+         Pedido pedido;
+         try {
+            PedidoRequisicao pedidoReq = new ObjectMapper().readValue(carrinho, PedidoRequisicao.class);
                 List<ProdutoVO> produtosVO = new ArrayList<ProdutoVO>();
-                ProdutoVO produtoVO = new ProdutoVO(listaCarrinho.getProdutos().get(0).idProduto().toString(), listaCarrinho.getProdutos().get(0).quantidadeProduto().toString());
-                produtosVO.add(produtoVO);
-                pedido = new Pedido(produtosVO, carrinho.get(0).getIdCliente(), listaCarrinho.getValorTotal(),
+                for(ProdutosReq prodVo : pedidoReq.getProdutos()){
+                    produtosVO.add(new ProdutoVO(prodVo.getIdProduto(), prodVo.getQuantidadeProduto()));
+                }
+                
+                pedido = new Pedido(Long.valueOf(pedidoReq.getIdPedido()), produtosVO, pedidoReq.getIdCliente(), pedidoReq.getValorTotal(),
                     StatusPedidoEnum.buscaEnumPorStatusString("RECEBIDO"), "35:00",StatusPagamentoEnum.PENDENTE);
-                this.carrinhoClient.deleteCarrinho(listaCarrinho.id());
-                idsCriados += this.pedidoRepositorio.criar(pedido) + ",";
-            }
-        }
-        return idsCriados;
+                this.pedidoRepositorio.criar(pedido);
+         } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+         }
     }
 
     @Override
-    public Pedido atualizar(Long id) {
-        Pedido pedidoBusca = this.pedidoRepositorio.buscarPedidoPorId(id);
-        Pedido pedido = null;
-
-        if (pedidoBusca == null) {
-            throw new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue());
-        }
-        if (pedidoBusca.getStatusPagamento() == StatusPagamentoEnum.RECUSADO){
-            throw new BadRequestException(ExceptionsMessages.PAGAMENTO_NAO_FOI_APROVADO.getValue());
-        }
-        if (pedidoBusca.getStatusPagamento() == StatusPagamentoEnum.PENDENTE){
-            throw new BadRequestException(ExceptionsMessages.PAGAMENTO_PENDENTE.getValue());
-        }
-
-        if (pedidoBusca.getStatus() == StatusPedidoEnum.RECEBIDO) {
-            pedido = new Pedido(
-                    pedidoBusca.getId(),
-                    pedidoBusca.getProdutos(),
-                    pedidoBusca.getCliente(),
-                    pedidoBusca.getValorTotal(),
-                    pedidoBusca.getStatus(),
-                    pedidoBusca.getTempoEspera(),
-                    atualizarPagamento(pedidoBusca.getId()));
-        } else {
+    @Transactional
+    public void atualizar(String message, boolean isCancelarPedido) {
+        try{
+            PedidoRequisicao pedidoReq = new ObjectMapper().readValue(message, PedidoRequisicao.class);
+            Pedido pedidoBusca = this.pedidoRepositorio.buscarPedidoPorId(Long.valueOf(pedidoReq.getIdPedido()));
+            Pedido pedido = null;
+    
+            if (pedidoBusca == null) {
+                throw new BadRequestException(ExceptionsMessages.PEDIDO_NAO_ENCONTRADO.getValue());
+            }
+    
             pedido = pedidoBusca;
+    
+            if (isCancelarPedido) {
+                pedido.setStatus(StatusPedidoEnum.CANCELADO);
+            }
+    
+            this.pedidoRepositorio.atualizar(isCancelarPedido == true ? pedido : pedido.atualizaStatus());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
-
-        return this.pedidoRepositorio.atualizar(pedido.atualizaStatus());
     }
 
     @Override

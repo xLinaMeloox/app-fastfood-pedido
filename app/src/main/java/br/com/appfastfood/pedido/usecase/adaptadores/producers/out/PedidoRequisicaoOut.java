@@ -1,4 +1,4 @@
-package br.com.appfastfood.pedido.aplicacao.adaptadores.requisicao;
+package br.com.appfastfood.pedido.usecase.adaptadores.producers.out;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,10 +13,10 @@ import java.util.List;
 @Setter
 @Builder()
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PedidoRequisicao implements Serializable {
+public class PedidoRequisicaoOut implements Serializable {
 
     @JsonProperty("produtos")
-    private List<ProdutosReq> produtos;
+    private List<ProdutosRequisicaoOut> produtos;
 
     @JsonProperty("id_cliente")
     private String idCliente;
@@ -36,11 +36,11 @@ public class PedidoRequisicao implements Serializable {
     @JsonProperty("status_pagamento")
     private String statusPagamento;
 
-    public PedidoRequisicao(List<ProdutosReq> produtos,
-            String idCliente,
-            Double valorTotal,
-            String status,
-            String tempoEspera, String idPedido, String statusPagamento) {
+    public PedidoRequisicaoOut(List<ProdutosRequisicaoOut> produtos,
+                                    String idCliente,
+                                    Double valorTotal,
+                                    String status,
+                                    String tempoEspera, String idPedido, String statusPagamento) {
         this.idCliente = idCliente;
         this.valorTotal = valorTotal;
         this.produtos = produtos;
@@ -50,5 +50,7 @@ public class PedidoRequisicao implements Serializable {
         this.statusPagamento = statusPagamento;
     }
 
-    public PedidoRequisicao(){}
+
+    public PedidoRequisicaoOut() {
+    }
 }

@@ -34,30 +34,6 @@ public class PedidoController {
                 this.pedidoServico = pedidoServico;
         }
 
-        @PostMapping
-        @Operation(summary = "Cadastrar Pedido", description = "Funcionalidade de criar um pedido")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "201", description = "pedido cadastrado com sucesso", content = {
-                                        @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoResposta.class)) }),
-                        @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<PedidoRequisicao> criar() {
-                String id = this.pedidoServico.criar();
-                                return ResponseEntity.status(HttpStatus.CREATED)
-                                .body(PedidoRequisicao.builder().idPedido(id).build());
-        }
-
-        @PutMapping("/{id}")
-        @Operation(summary = "Atualizar status do pedido", description = "Funcionalidade de atualizar o status do pedido passando o parametro 'id' do pedido")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso", content = {
-                                        @Content() }),
-                        @ApiResponse(responseCode = "400", description = "", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequisicaoExcecao.class))) })
-        public ResponseEntity<Pedido> atualizarStatus(@PathVariable("id") Long id) {
-
-                Pedido pedidoRetorno = this.pedidoServico.atualizar(id);
-                return ResponseEntity.status(HttpStatus.OK).body(pedidoRetorno);
-        }
-
         @GetMapping("/{id}")
         @Operation(summary = "Buscar pedidos por id", description = "Funcionalidade que retorna o pedido passando o parametro id do pedido")
         @ApiResponses(value = {

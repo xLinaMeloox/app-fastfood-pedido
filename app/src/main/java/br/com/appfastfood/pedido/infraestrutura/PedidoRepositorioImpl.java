@@ -12,10 +12,10 @@ import br.com.appfastfood.pedido.dominio.repositorios.PedidoRepositorio;
 import br.com.appfastfood.pedido.exceptions.ExceptionsMessages;
 import br.com.appfastfood.pedido.infraestrutura.entidades.PedidoEntidade;
 import br.com.appfastfood.pedido.infraestrutura.entidades.ProdEnt;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.appfastfood.pedido.usecase.adaptadores.producers.PedidoQueueAdapterOUT;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +27,13 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
     private final MongoTemplate mongoTemplate;
     private final PagamentoClient pagamentoClient;
     private final SpringDataPedidoRepository springDataPedidoRepository;
+    private final PedidoQueueAdapterOUT pedidoQueueAdapterOUT;   
 
-    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate ) {
+    public PedidoRepositorioImpl(SpringDataPedidoRepository springDataPedidoRepository, PagamentoClient pagamentoClient, MongoTemplate mongoTemplate ,PedidoQueueAdapterOUT pedidoQueueAdapterOUT ) {
         this.springDataPedidoRepository = springDataPedidoRepository;
         this.pagamentoClient = pagamentoClient;
         this.mongoTemplate = mongoTemplate;
+        this.pedidoQueueAdapterOUT = pedidoQueueAdapterOUT;
     }
 
     @Override
@@ -40,10 +42,12 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
         pedido.getProdutos().forEach(produto -> {
             produtosEntidade.add(new ProdEnt(produto.getIdProduto(), produto.getQuantidadeProduto()));
         });
-        PedidoEntidade pedidoDb = new PedidoEntidade(1L, produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
+        PedidoEntidade pedidoDb = new PedidoEntidade(pedido.getId(), produtosEntidade, pedido.getCliente(), pedido.getValorTotal(),
                 StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
            springDataPedidoRepository.save(pedidoDb);
+           pedidoQueueAdapterOUT.criar(pedido);
+
         return pedidoDb.getId().toString();
     }
 
@@ -57,6 +61,14 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
                 pedido.getValorTotal(), StatusPedidoEnum.retornaNomeEnum(pedido.getStatus()), pedido.getTempoEspera(),
                 StatusPagamentoEnum.retornaNomeStatusPagamentoEnum(pedido.getStatusPagamento()));
         this.springDataPedidoRepository.save(pedidoDb);
+        
+        if(pedido.getStatus().getNome().equals(StatusPedidoEnum.PRONTO.getNome())){
+            pedidoQueueAdapterOUT.pedidoPreparado(pedido);
+        }else if(pedido.getStatus().getNome().equals(StatusPedidoEnum.FINALIZADO.getNome())){
+            pedidoQueueAdapterOUT.pedidoFinalizado(pedido);
+        }else if(pedido.getStatus().getNome().equals(StatusPedidoEnum.CANCELADO.getNome())){
+            pedidoQueueAdapterOUT.cancelaPedido(pedido);
+        }
         return pedido;
     }
 

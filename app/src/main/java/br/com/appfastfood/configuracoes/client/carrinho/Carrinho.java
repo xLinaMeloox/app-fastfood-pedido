@@ -17,6 +17,10 @@ public record Carrinho(
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }

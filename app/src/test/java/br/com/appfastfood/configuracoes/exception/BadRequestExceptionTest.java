@@ -1,6 +1,7 @@
-package br.com.appfastfood.configuracoes.execption;
+package br.com.appfastfood.configuracoes.exception;
 
 import org.junit.jupiter.api.Test;
+import br.com.appfastfood.configuracoes.execption.BadRequestException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BadRequestExceptionTest {
