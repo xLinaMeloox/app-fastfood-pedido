@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: appfastfood-deployment
+  name: appfastfood-pedido-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: appfastfood
+      app: appfastfood-pedido
   template:
     metadata:
       labels:
-        app: appfastfood
+        app: appfastfood-pedido
     spec:
       containers:
-        - name: appfastfood
+        - name: appfastfood-pedido
           image: caikemury/appshakirafastfood:latest
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: appfastfood-configmap
+                name: appfastfood-pedido-configmap
             - secretRef:
                 name: app-secret
           readinessProbe:

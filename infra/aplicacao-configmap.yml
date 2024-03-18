@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: appfastfood-configmap
+  name: appfastfood-pedido-configmap
 data:
 
   MONGODB_HOST: "fastfood-docdb2-cluster.cluster-c4bgv5fkmppp.us-east-1.docdb.amazonaws.com"
