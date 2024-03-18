@@ -39,7 +39,7 @@ public class PedidoQueueAdapterOUT {
                 pedido.getStatusPagamento().name());
         try {
 
-            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:000000000000:pedido-criado");
+            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:101478099523:pedido-criado");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +60,7 @@ public class PedidoQueueAdapterOUT {
                 pedido.getId().toString(),
                 pedido.getStatusPagamento().name());
         try {
-            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:000000000000:pedido-preparado");
+            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:101478099523:pedido-preparado");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +80,7 @@ public class PedidoQueueAdapterOUT {
                 pedido.getId().toString(),
                 pedido.getStatusPagamento().name());
         try {
-            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:000000000000:pedido-finalizado");
+            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:101478099523:pedido-finalizado");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -100,7 +100,7 @@ public class PedidoQueueAdapterOUT {
                 pedido.getId().toString(),
                 pedido.getStatusPagamento().name());
         try {
-            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:000000000000:pedido-finalizado");
+            snsTopic.publish(new ObjectMapper().writeValueAsString(pedidoRequisicaoOut), "arn:aws:sns:us-east-1:101478099523:pedido-finalizado");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
