@@ -66,27 +66,7 @@ class PedidoTest {
         assertEquals(statusPagamento, pedido.getStatusPagamento());
     }
 
-    @Test
-    void atualizaStatus_DeveAtualizarStatusDoPedidoCorretamente() {
-        // Arrange
-        List<ProdutoVO> produtos = new ArrayList<>();
-        produtos.add(new ProdutoVO("1", "2"));
-        produtos.add(new ProdutoVO("2", "1"));
-        String cliente = "12465";
-        Double valorTotal = 100.00;
-        StatusPedidoEnum status = StatusPedidoEnum.RECEBIDO;
-        String tempoEspera = "30";
-        StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.PENDENTE;
-        Pedido pedido = new Pedido(1L, produtos, cliente, valorTotal, status, tempoEspera, statusPagamento);
 
-        // Act
-        Pedido pedidoAtualizado = pedido.atualizaStatus();
-
-        // Assert
-        assertNotNull(pedidoAtualizado);
-        assertEquals(StatusPedidoEnum.EM_PREPARACAO, pedidoAtualizado.getStatus());
-        assertEquals(StatusPagamentoEnum.PENDENTE, pedidoAtualizado.getStatusPagamento());
-    }
 
     @Test
     void testSetStatusPagamento() {

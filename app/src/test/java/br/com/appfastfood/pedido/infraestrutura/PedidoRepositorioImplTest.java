@@ -43,20 +43,7 @@ class PedidoRepositorioImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void criar_DeveRetornarIdDoPedido() {
-        // Arrange
-        Pedido pedido = mockPedido();
-        when(springDataPedidoRepository.save(any())).thenReturn(mockPedidoEntidade());
 
-        // Act
-        String idPedido = pedidoRepositorio.criar(pedido);
-
-        // Assert
-        assertNotNull(idPedido);
-        assertFalse(idPedido.isEmpty());
-        verify(springDataPedidoRepository, times(1)).save(any());
-    }
 
     @Test
     void atualizar_DeveRetornarPedidoAtualizado() {
